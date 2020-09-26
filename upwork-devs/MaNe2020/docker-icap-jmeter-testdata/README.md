@@ -1,4 +1,4 @@
-## Integration of p-k8-test-data with test frameworkk (jmeter+icap)
+## Integration of p-k8-test-data with test framework (jmeter+icap)
 
 ### Run docker images
 ```
@@ -21,7 +21,8 @@
 1. After git clone use command: find . -type f -exec dos2unix {} \; 
 2. Verify you have jmeter symbolic link set in your WSL: https://linuxize.com/post/how-to-create-symbolic-links-in-linux-using-the-ln-command/
 3. Verify you have python installed and command can be used/linked as python (python --version)
-4. You specified the path to cloned repo, pointing to docker-icap-jmeter-testdata folder before running jmeter command
+4. Install test data requerments.txt, from file_distribution folder run: pip install -r requirements.txt
+5. You specified the path to cloned repo, pointing to docker-icap-jmeter-testdata folder before running jmeter command
 
 
 
