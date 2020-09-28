@@ -24,4 +24,14 @@ ENV PATH $PATH:${JMETER_BIN}
 COPY ./Test /usr/share/Test/
 
 RUN chmod +x /usr/share
-ENTRYPOINT ["/usr/share/Test/launch.sh"]
+#ENTRYPOINT ["/usr/share/Test/launch.sh"]
+
+COPY requirement.txt .
+
+RUN pip3 install -r requirement.txt --user
+
+COPY processor.py .
+
+COPY logging.conf .
+
+CMD ["python3", "processor.py"]
