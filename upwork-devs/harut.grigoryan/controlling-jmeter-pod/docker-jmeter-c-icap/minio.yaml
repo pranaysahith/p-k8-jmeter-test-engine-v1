@@ -1,0 +1,114 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: input-queue
+spec:
+  selector:
+    matchLabels:
+      app: input-queue
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: input-queue
+    spec:
+      containers:
+      - name: input-queue
+        image: minio/minio:RELEASE.2020-05-01T22-19-14Z
+        args:
+        - server
+        - /data
+        env:
+        - name: MINIO_ACCESS_KEY
+          value: "test"
+        - name: MINIO_SECRET_KEY
+          value: "test@123"
+        ports:
+        - containerPort: 9000
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: output-queue
+spec:
+  selector:
+    matchLabels:
+      app: output-queue
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: output-queue
+    spec:
+      containers:
+      - name: output-queue
+        image: minio/minio:RELEASE.2020-05-01T22-19-14Z
+        args:
+        - server
+        - /data
+        env:
+        - name: MINIO_ACCESS_KEY
+          value: "test"
+        - name: MINIO_SECRET_KEY
+          value: "test@123"
+        ports:
+        - containerPort: 9000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: input-queue
+  labels:
+    service: input-queue
+spec:
+  selector:
+    app: input-queue
+  ports:
+    - name: http
+      port:  9000
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: output-queue
+  labels:
+    service: output-queue
+spec:
+  selector:
+    app: output-queue
+  ports:
+    - name: http
+      port:  9000
+  type: ClusterIP      
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: input-queue-nodeport
+spec:
+  selector:
+    app: input-queue
+  ports:
+    - name: http
+      port: 9000
+  type: NodePort
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: output-queue-nodeport
+spec:
+  selector:
+    app: output-queue
+  ports:
+    - name: http
+      port: 9000
+  type: NodePort
