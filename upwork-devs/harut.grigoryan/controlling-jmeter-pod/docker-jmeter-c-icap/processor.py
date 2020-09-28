@@ -8,6 +8,8 @@ import requests
 import time
 from botocore.client import Config
 from botocore.exceptions import ClientError
+from os import listdir
+from os.path import isfile, join
 
 class ElkJsonFormatter(jsonlogger.JsonFormatter):
     def add_fields(self, log_record, record, message_dict):
@@ -42,7 +44,6 @@ class Main():
 
     @staticmethod
     def upload_to_minio(file_path, filename):
-
         try:
             logger.info('Uploading file {}.'.format(filename))
 
@@ -62,24 +63,23 @@ class Main():
 
     @staticmethod
     def application():
-        endpoint = '/minio/health/ready'
-        logger.debug('Checking if the Target Minio {} is avaliable.'.format(TGT_URL))
-        URL = TGT_URL + endpoint
+        #if os.name == 'nt':
+        #    file_path = 'C:/GW/files/'
         try:
-            response = requests.get(URL, timeout=2)
-            if response.status_code == 200:
-                logger.debug('Recieved Response code {} from {}'.format(response.status_code, URL))
-            else:
-                logger.error('Could Not connect to Target Minio {}.'.format(URL))
-                exit(1)
-        except:
-            logger.error(
-                'Could not connect to Target Minio {}.'.format(URL))
+            for f in listdir(file_path):
+                if isfile(join(file_path, f)):
+                    logger.info(f)
+                    Main.upload_to_minio(file_path, f)
+        except Exception as e:
+            logger.error(e)
 
     @staticmethod
     def main():
-        os.system('/usr/share/Test/launch.sh')
         Main.log_level(LOG_LEVEL)
+        #if os.name == 'nt':
+        #    file_path = 'C:/GW/files/'
+        #else:
+        os.system('/usr/share/Test/launch.sh')
         # os.system('service filebeat start')
         Main.application()
         # let filebeat do his job
