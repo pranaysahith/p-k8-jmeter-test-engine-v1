@@ -1,6 +1,6 @@
 # ICAP+JMeter Dockerfile
 
-## Deploy and run in PowerShell
+## Deploy and run from within the PowerShell
 ```
     powershell -ExecutionPolicy ByPass -File .\deploy-minio.ps1
 ```
