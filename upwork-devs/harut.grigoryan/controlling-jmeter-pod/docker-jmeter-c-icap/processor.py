@@ -68,6 +68,11 @@ class Main():
                 if isfile(join(OUTPUT_PATH, f)):
                     logger.info(f)
                     Main.upload_to_minio(TGT_BUCKET, OUTPUT_PATH, f)
+
+            report_file = POD_NAME + '.tar.gz'
+            os.system('tar -zcvf ' + report_file + ' /usr/share/Test/report/')
+            Main.upload_to_minio(TGT_BUCKET, '/', report_file)
+            
         except Exception as e:
             logger.error(e)
 
