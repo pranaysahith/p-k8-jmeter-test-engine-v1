@@ -1,0 +1,33 @@
+name: run_tests
+
+on:
+  push:
+    paths-ignore:
+    - 'upwork-devs/**'
+    branches:
+    - master
+
+jobs:
+  tests:
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: install kubectl
+        uses: azure/setup-kubectl@v1
+        with:
+          version: 'latest'
+        id: install_kubectl
+
+      - uses: azure/k8s-set-context@v1
+        with:
+          method: service-account
+          k8s-url: ${{ secrets.K8S_URL }}
+          k8s-secret: ${{ secrets.K8S_SECRET }}
+        id: setcontext
+
+      - name: get_namespaces
+        run: |
+          kubectl get ns

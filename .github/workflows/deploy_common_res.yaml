@@ -15,19 +15,33 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
 
-      - name: install kubectl
+      - name: Install kubectl
         uses: azure/setup-kubectl@v1
         with:
           version: 'latest'
         id: install_kubectl
 
-      - uses: azure/k8s-set-context@v1
+      - name: Set k8s context
+        uses: azure/k8s-set-context@v1
         with:
           method: service-account
           k8s-url: ${{ secrets.K8S_URL }}
           k8s-secret: ${{ secrets.K8S_SECRET }}
         id: setcontext
 
-      - name: get_namespaces
-        run: |
-          kubectl get ns
+      - name: Create secret with grafana creds
+        uses: azure/k8s-create-secret@v1
+        with:
+          namespace: 'grafana'
+          secret-type: 'generic'
+          arguments:  --from-literal=account-name=${{ secrets.GF_USERNAME }} --from-literal=access-key=${{ secrets.GF_PASSWORD }}
+          secret-name: grafana-creds
+
+      - name: Deploy grafana to k8s
+        uses: Azure/k8s-deploy@v1
+        with:
+          namespace: 'grafana'
+          manifests: |
+              kubernetes/common_resources/grafana.yaml
+          kubectl-version: 'latest'
+
