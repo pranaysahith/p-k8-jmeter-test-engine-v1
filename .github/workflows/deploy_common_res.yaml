@@ -29,6 +29,10 @@ jobs:
           k8s-secret: ${{ secrets.K8S_SECRET }}
         id: setcontext
 
+      - name: Create namespace
+        run: |
+          kubectl create ns grafana --dry-run=client -o yaml | kubectl apply -f -
+
       - name: Create secret with grafana creds
         uses: azure/k8s-create-secret@v1
         with:
