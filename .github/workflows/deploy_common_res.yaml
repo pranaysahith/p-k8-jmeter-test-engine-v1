@@ -34,7 +34,7 @@ jobs:
         with:
           namespace: 'grafana'
           secret-type: 'generic'
-          arguments:  --from-literal=account-name=${{ secrets.GF_USERNAME }} --from-literal=access-key=${{ secrets.GF_PASSWORD }}
+          arguments:  --from-literal=username=${{ secrets.GF_USERNAME }} --from-literal=password=${{ secrets.GF_PASSWORD }}
           secret-name: grafana-creds
 
       - name: Deploy grafana to k8s
