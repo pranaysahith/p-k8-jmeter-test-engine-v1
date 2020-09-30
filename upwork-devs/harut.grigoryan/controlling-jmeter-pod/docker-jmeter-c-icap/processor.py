@@ -20,13 +20,14 @@ class ElkJsonFormatter(jsonlogger.JsonFormatter):
 logging.config.fileConfig('logging.conf')
 logger = logging.getLogger('file processor')
 
-TGT_URL = os.getenv('TARGET_MINIO_URL', 'http://192.168.99.123:30493')
+TGT_URL = os.getenv('TARGET_MINIO_URL', 'http://127.0.0.1:9000')
 TGT_ACCESS_KEY = os.getenv('TARGET_MINIO_ACCESS_KEY', 'test')
 TGT_SECRET_KEY = os.getenv('TARGET_MINIO_SECRET_KEY', 'test@123')
 TGT_BUCKET = os.getenv('TARGET_MINIO_BUCKET', 'output')
 
 OUTPUT_PATH = os.getenv('OUTPUT_PATH', '/usr/share/Test/output/')
 REPORT_PATH = os.getenv('OUTPUT_PATH', '/usr/share/Test/report/')
+REPORT_BUCKET = os.getenv('REPORTS_MINIO_BUCKET', 'reports')
 
 POD_NAME = os.getenv('POD_NAME', 'file-processor-pod')
 
@@ -71,7 +72,7 @@ class Main():
 
             report_file = POD_NAME + '.tar.gz'
             os.system('tar -zcvf ' + report_file + ' /usr/share/Test/report/')
-            Main.upload_to_minio(TGT_BUCKET, '/', report_file)
+            Main.upload_to_minio(REPORT_BUCKET, '/', report_file)
             
         except Exception as e:
             logger.error(e)
