@@ -19,9 +19,9 @@ Set below secrets in Github project before running Github workflow to deploy Gra
 1. GF_USERNAME
 2. GF_PASSWORD
 
-Connect to Grafana on https://localhost:3000 using below commands
+Connect to Grafana on http://localhost:3000 using below commands
 
-    kubectl port-forward -n grafana service/grafana 3000
+    kubectl port-forward -n grafana service/grafana-service 3000
 
 
 ## ELK
@@ -42,10 +42,16 @@ Set below secrets in Github project before running Github workflow to deploy Min
 1. MINIO_ACCESS_KEY
 2. MINIO_SECRET_KEY
 
-Connect to Minio on https://localhost:8080 using below commands
+Connect to Minio on http://localhost:9000 by running below commands
 
-    kubectl port-forward -n minio service/minio 8080
+    kubectl port-forward -n minio service/minio 9000
 
 
 ## Influxdb
 TODO
+
+## Prometheus
+
+Connect to Prometheus server on http://localhost:9090 URL by running these commands:
+    
+    kubectl --namespace prometheus port-forward svc/prometheus-server 9090:80
