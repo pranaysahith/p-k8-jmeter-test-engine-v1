@@ -71,28 +71,3 @@ spec:
   selector:
     app: grafana
 
----
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: grafana
-  namespace: grafana
-  annotations:
-    # app.kubernetes.io/name: ingress-nginx
-    # app.kubernetes.io/part-of: ingress-nginx
-    kubernetes.io/ingress.class: traefik
-    kubernetes.io/tls-acme: "true"
-    cert-manager.io/cluster-issuer: letsencrypt
-spec:
-  rules:
-    - host: grafana.sahith.in
-      http:
-        paths:
-          - path: /
-            backend:
-              serviceName: grafana-service
-              servicePort: 3000
-  tls:
-    - hosts:
-      - grafana.sahith.in
-      secretName: grafana-cert
