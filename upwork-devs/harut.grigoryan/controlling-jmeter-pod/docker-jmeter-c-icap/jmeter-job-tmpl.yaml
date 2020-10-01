@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: jmeter
-        image: ggrig/jmeter-c-icap:1.0
+        image: ggrig/jmeter-c-icap:1.1
         #imagePullPolicy: Always
         env:
           # Source Minio Infromation
@@ -63,12 +63,12 @@ spec:
         #        key: secretkey           
         #workingDir: /mnt/workspace
         #command: [ "/bin/sh", "-c", "/mnt/workspace/jmeter.sh" ]
-        #volumeMounts:
-        #- name: jmetervol
-        #  mountPath: "/etc/conf"
-        #  readOnly: true
-      #volumes:
-      #- name: jmetervol
-      #  secret:
-      #    secretName: jmeterconf          
+        volumeMounts:
+        - name: jmetervol
+          mountPath: "/etc/conf"
+          readOnly: true
+      volumes:
+      - name: jmetervol
+        secret:
+          secretName: jmeterconf          
       restartPolicy: Never
