@@ -82,7 +82,7 @@ metadata:
     app.kubernetes.io/part-of: ingress-nginx
 spec:
   rules:
-    - host: minio.sahith.in
+    - host: grafana.sahith.in
       http:
         paths:
           - path: /
