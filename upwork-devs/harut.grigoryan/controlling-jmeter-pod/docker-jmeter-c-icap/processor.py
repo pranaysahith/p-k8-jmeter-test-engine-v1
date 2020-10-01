@@ -73,6 +73,7 @@ class Main():
             report_file = POD_NAME + '.tar.gz'
             os.system('tar -zcvf ' + report_file + ' /usr/share/Test/report/')
             Main.upload_to_minio(REPORT_BUCKET, '/', report_file)
+            exit(0)
             
         except Exception as e:
             logger.error(e)
@@ -85,15 +86,10 @@ class Main():
         #else:
         os.system('/usr/share/Test/launch.sh')
         # os.system('service filebeat start')
-        Main.application()
-        time.sleep(5)
 
-        if SHELL_ACCESS:
-            while True:
-                Main.application()
-                time.sleep(5)
+        while True:
+            Main.application()
+            time.sleep(5)
 
 if __name__ == "__main__":
     Main.main()
-
-#tar -zcvf report.tar.gz /usr/share/Test/report/
