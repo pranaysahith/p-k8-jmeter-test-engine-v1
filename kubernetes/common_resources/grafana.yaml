@@ -28,12 +28,14 @@ spec:
         - env:
             - name: GF_SECURITY_ADMIN_USER
               valueFrom:
-                key : "username"
-                name: "grafana-creds"
+                secretKeyRef:
+                  key : "username"
+                  name: "grafana-creds"
             - name: GF_SECURITY_ADMIN_PASSWORD
               valueFrom:
-                key : "password"
-                name: "grafana-creds"
+                secretKeyRef:
+                  key : "password"
+                  name: "grafana-creds"
           image: grafana/grafana:7.0.1
           imagePullPolicy: IfNotPresent
           name: grafana
