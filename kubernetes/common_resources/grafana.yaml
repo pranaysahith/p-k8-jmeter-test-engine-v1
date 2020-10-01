@@ -82,6 +82,7 @@ metadata:
     # app.kubernetes.io/part-of: ingress-nginx
     kubernetes.io/ingress.class: traefik
     kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: letsencrypt
 spec:
   rules:
     - host: grafana.sahith.in
