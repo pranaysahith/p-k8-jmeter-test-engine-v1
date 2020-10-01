@@ -34,6 +34,7 @@ jobs:
           # kubectl create ns grafana --dry-run=client -o yaml | kubectl apply -f -
           kubectl get ns grafana || kubectl create ns grafana
           kubectl get ns elk || kubectl create ns elk
+          kubectl get ns minio || kubectl create ns minio
 
       - name: Create secret with grafana creds
         uses: azure/k8s-create-secret@v1
@@ -59,4 +60,19 @@ jobs:
             kubernetes/common_resources/elk/tenant_multipod.yaml
             kubernetes/common_resources/elk/tenant.yaml
           kubectl-version: 'latest'
-          
+
+      - name: Create secret with minio creds
+        uses: azure/k8s-create-secret@v1
+        with:
+          namespace: 'minio'
+          secret-type: 'generic'
+          arguments:  --from-literal=username=${{ secrets.MINIO_ACCESS_KEY }} --from-literal=password=${{ secrets.MINIO_SECRET_KEY }}
+          secret-name: minio-creds
+
+      - name: Deploy minio
+        uses: Azure/k8s-deploy@v1
+        with:
+          namespace: 'minio'
+          manifests: |
+              kubernetes/common_resources/minio.yaml
+          kubectl-version: 'latest'
