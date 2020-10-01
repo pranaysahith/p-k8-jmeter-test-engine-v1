@@ -1,0 +1,78 @@
+name: deploy_common_res
+
+on:
+  push:
+    paths-ignore:
+    - 'upwork-devs/**'
+    branches:
+    - github_actions
+
+jobs:
+  deploy:
+    name: deploy common resources
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v1
+        with:
+          version: 'latest'
+        id: install_kubectl
+
+      - name: Set k8s context
+        uses: azure/k8s-set-context@v1
+        with:
+          method: service-account
+          k8s-url: ${{ secrets.K8S_URL }}
+          k8s-secret: ${{ secrets.K8S_SECRET }}
+        id: setcontext
+
+      - name: Create namespaces
+        run: |
+          # kubectl create ns grafana --dry-run=client -o yaml | kubectl apply -f -
+          kubectl get ns grafana || kubectl create ns grafana
+          kubectl get ns elk || kubectl create ns elk
+          kubectl get ns minio || kubectl create ns minio
+
+      - name: Create secret with grafana creds
+        uses: azure/k8s-create-secret@v1
+        with:
+          namespace: 'grafana'
+          secret-type: 'generic'
+          arguments:  --from-literal=username=${{ secrets.GF_USERNAME }} --from-literal=password=${{ secrets.GF_PASSWORD }}
+          secret-name: grafana-creds
+
+      - name: Deploy grafana to k8s
+        uses: Azure/k8s-deploy@v1
+        with:
+          namespace: 'grafana'
+          manifests: |
+              kubernetes/common_resources/grafana.yaml
+          kubectl-version: 'latest'
+
+      - name: Deploy ELK
+        uses: Azure/k8s-deploy@v1
+        with:
+          namespace: elk
+          manifests: |
+            kubernetes/common_resources/elk/tenant_multipod.yaml
+            kubernetes/common_resources/elk/tenant.yaml
+          kubectl-version: 'latest'
+
+      - name: Create secret with minio creds
+        uses: azure/k8s-create-secret@v1
+        with:
+          namespace: 'minio'
+          secret-type: 'generic'
+          arguments:  --from-literal=MINIO_ACCESS_KEY=${{ secrets.MINIO_ACCESS_KEY }} --from-literal=MINIO_SECRET_KEY=${{ secrets.MINIO_SECRET_KEY }}
+          secret-name: minio-creds
+
+      - name: Deploy minio
+        uses: Azure/k8s-deploy@v1
+        with:
+          namespace: 'minio'
+          manifests: |
+              kubernetes/common_resources/minio.yaml
+          kubectl-version: 'latest'
