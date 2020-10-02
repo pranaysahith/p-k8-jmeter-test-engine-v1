@@ -22,6 +22,7 @@ EXPOSE 1344
 
 ENV PATH $PATH:${JMETER_BIN}
 COPY ./Test /usr/share/Test/
+COPY ./jmeter-conf.jmx /etc/conf/
 
 RUN chmod +x /usr/share
 #ENTRYPOINT ["/usr/share/Test/launch.sh"]
