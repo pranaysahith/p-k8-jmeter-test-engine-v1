@@ -47,11 +47,15 @@ Connect to Minio on http://localhost:9000 by running below commands
     kubectl port-forward -n minio service/minio 9000
 
 
-## Influxdb
-TODO
+## InfluxDB
+
+Connect to InfluxDB on http://localhost:8086 by running below commands
+
+    kubectl port-forward -n inlfuxdb service/influxdb 8086
+
 
 ## Prometheus
 
 Connect to Prometheus server on http://localhost:9090 URL by running these commands:
     
-    kubectl --namespace prometheus port-forward svc/prometheus-server 9090:80
+    kubectl --namespace prometheus port-forward service/prometheus-server 9090:80
