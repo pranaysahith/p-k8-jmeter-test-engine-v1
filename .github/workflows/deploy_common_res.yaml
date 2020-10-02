@@ -5,7 +5,7 @@ on:
     paths-ignore:
     - 'upwork-devs/**'
     branches:
-    - master
+    - github_actions
 
 jobs:
   deploy:
@@ -37,11 +37,11 @@ jobs:
 
       - name: Create namespaces
         run: |
-          # kubectl create ns grafana --dry-run=client -o yaml | kubectl apply -f -
           kubectl get ns grafana || kubectl create ns grafana
           kubectl get ns elk || kubectl create ns elk
           kubectl get ns minio || kubectl create ns minio
           kubectl get ns prometheus || kubectl create ns prometheus
+          kubectl get ns inlufxdb || kubectl create ns inlufxdb
 
       - name: Create secret with grafana creds
         uses: azure/k8s-create-secret@v1
@@ -89,3 +89,11 @@ jobs:
           helm repo add stable https://kubernetes-charts.storage.googleapis.com
           helm repo update
           helm upgrade --install -n prometheus prometheus stable/prometheus
+
+      - name: Deploy InfluxDB
+        uses: Azure/k8s-deploy@v1
+        with:
+          namespace: 'influxdb'
+          manifests: |
+              kubernetes/common_resources/influxdb.yaml
+          kubectl-version: 'latest'
