@@ -32,3 +32,5 @@ for ( $i = 0; $i -lt $NUMBER_OF_JOBS; $i++ ) {
     kubectl create -f .\jmeter-jobs\job-$i.yaml
     rm ".\jmeter-jobs\job-$i.yaml"
 }
+
+rm jmeter-conf.jmx

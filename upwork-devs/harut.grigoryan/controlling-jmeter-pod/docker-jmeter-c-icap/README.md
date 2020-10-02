@@ -22,7 +22,7 @@ On Windows 10 run the following from within the PowerShell
 ```
 So, to start 10 JMeter jobs run:
 ```
-    powershell -ExecutionPolicy ByPass -File run.ps1 .\Test\icap.jmx 10
+    powershell -ExecutionPolicy ByPass -File run.ps1 .\icap.jmx 10
 ```
 ### Stop and remove 
 ```
