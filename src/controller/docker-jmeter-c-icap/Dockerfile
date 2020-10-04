@@ -24,15 +24,13 @@ ENV PATH $PATH:${JMETER_BIN}
 COPY ./Test /usr/share/Test/
 COPY ./jmeter-conf.jmx /etc/conf/
 
-RUN chmod +x /usr/share
-#ENTRYPOINT ["/usr/share/Test/launch.sh"]
+RUN chmod -R +x /usr/share/Test
 
+WORKDIR /app
 COPY requirement.txt .
 
 RUN pip3 install -r requirement.txt --user
 
-COPY processor.py .
-
-COPY logging.conf .
+COPY . .
 
 CMD ["python3", "processor.py"]

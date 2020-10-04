@@ -3,8 +3,8 @@ services:
   glasswall-crawler:
     image: glasswallcrawler:1.0
     build:
-      context: .
-      dockerfile: gw_crawler/Dockerfile
+      context: gw_crawler
+      dockerfile: Dockerfile
     env_file:
       - gw_crawler/.env
     ports:
@@ -15,8 +15,8 @@ services:
   k8-file-distribution:
     image: k8-file-distribution
     build:
-      context: .
-      dockerfile: file_distribution/Dockerfile
+      context: file_distribution
+      dockerfile: Dockerfile
     env_file:
       - file_distribution/.env
     ports:
@@ -24,11 +24,41 @@ services:
       - 5001:5001
     links:
       - minio
-      
+
   icap-jmeter:
     image: icap-jmeter
+    build:
+      context: controller/docker-jmeter-c-icap
+    depends_on:
+      - output-queue
+    environment:
+      TARGET_MINIO_URL: "output-queue:9000"
+      TARGET_MINIO_ACCESS_KEY: minio1
+      TARGET_MINIO_SECRET_KEY: minio1@123
+      TARGET_MINIO_BUCKET: output
+      INPUT_FILE_PATH: Macros.xls
+      # Log Level (Default to info)
+      LOG_LEVEL: info
+      API_TOKEN: YOUR_REBUILD_API_TOKEN
+      API_URL: "https://gzlhbtpvk2.execute-api.eu-west-1.amazonaws.com/Prod/api/rebuild/file"
     ports:
       - 1344:1344
+
+  output-queue:
+    image: minio/minio:RELEASE.2020-10-03T02-19-42Z 
+    volumes:
+      - data1-1:/data
+    ports:
+      - "9001:9000"
+    environment:
+      MINIO_ACCESS_KEY: minio1
+      MINIO_SECRET_KEY: minio1@123
+    command: server /data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
 
   minio:
     image: minio/minio:RELEASE.2020-09-08T23-05-18Z
