@@ -77,7 +77,6 @@ class Main():
         self.download_from_minio()
         os.system('/usr/share/Test/launch.sh')
         self.upload_results()
-        time.sleep(600)
 
 if __name__ == "__main__":
     main = Main()
