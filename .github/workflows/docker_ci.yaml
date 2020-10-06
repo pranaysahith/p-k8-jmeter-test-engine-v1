@@ -26,7 +26,6 @@ jobs:
         with:
           context: src/controller/docker-jmeter-c-icap
           file: src/controller/docker-jmeter-c-icap/Dockerfile
-          platforms: linux/amd64,linux/arm64,linux/386
           push: true
           tags: docker.pkg.github.com/pranaysahith/p-k8-jmeter-test-engine-v1/jmeter-icap:0.0.1
 
