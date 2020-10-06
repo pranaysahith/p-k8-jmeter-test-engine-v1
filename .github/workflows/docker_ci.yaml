@@ -43,5 +43,5 @@ jobs:
           echo "::set-output name=image::$REGISTRY/$REPOSITORY:$IMAGE_TAG"
           
       - name: Docker logout
-        if: succeeded() || failed()
+        if: ${{ succeeded() || failed() }}
         run: docker logout
