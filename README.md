@@ -23,27 +23,6 @@ A first version of the Kubernetes (K8) native application able to generate up to
 - The logs, response times, throughput and error metrics etc. are sent to the Elastic logging pod
 - The metrics are sent to &amp; displayed on Kibana dashboard
 
-
-
-**k8-jmeter-test-engine-v2**
-
-Additional features to the V1 version of the Kubernetes (K8) native application to allow testing with traffic generated against the test website: SharePoint
-
-**Requirements:**
-- Configured web automation module executed inside pods in the K8 cluster with a traffic generator to simulate users for upload & download of files via SharePoint 
-- A scenario file defined with the action to be taken:(Navigate to Sharepoint, login, upload or download a file) and the files to be used using define test scenarios
-- Implemented assertion mechanism that validates that the downloaded/uploaded file is clean
-- Make use of the k8-test-engine v1 assertion mechanism that validates the response code returned
-- Make use of the k8-test-engine v1 logging solution to visualize the performance metrics 
-- Make use of the k8-test-engine v1 monitoring feature using Grafana for result dashboard display
-
-**K8s V2 Infrastructure**
-
-- The traffic generator will pick up a scenario & files, generate pods to execute all the instructions in the scenario file
-- The results(response times, throughput and error metrics etc) are sent to Influx DB
-- The metrics are sent to & displayed on Grafana dashboard
-
-
 **Metrics to monitor:**
 
 - **Running Servers Statistics**
@@ -79,8 +58,6 @@ Additional features to the V1 version of the Kubernetes (K8) native application 
 - CPU &amp; Memory utilisation of the running pods
 - Number of files processed
 - Number of concurrent requests processed
-
-
 
 **Success Criteria:**
 
