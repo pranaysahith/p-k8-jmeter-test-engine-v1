@@ -5,7 +5,7 @@ on:
     paths-ignore:
     - 'upwork-devs/**'
     branches:
-    - github_actions
+    - delete_me
 
 jobs:
   tests:
