@@ -26,6 +26,3 @@ jobs:
           repository: ${{ github.repository_owner }}/p-k8-jmeter-test-engine-v1/jmeter-icap
           registry: docker.pkg.github.com
           tag_with_ref: true
-
-      - name: Image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}
