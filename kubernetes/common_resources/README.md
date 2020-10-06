@@ -1,9 +1,16 @@
 # Deploy applications to K8s cluster
 
+Set below environment variables with the values you like, in the terminal before following the next deployment steps:
+
+1. GF_USERNAME
+2. GF_PASSWORD
+3. MINIO_ACCESS_KEY
+4. MINIO_SECRET_KEY
+
 ### Deploy grafana
 
     kubectl create ns grafana
-    kubectl -n grafana create secret generic grafana-creds --from-literal=username=GF_USERNAME --from-literal=password=GF_PASSWORD
+    kubectl -n grafana create secret generic grafana-creds --from-literal=username=$GF_USERNAME --from-literal=password=$GF_PASSWORD
     kubectl apply -n grafana -f grafana.yaml
 
 ### Deploy ELK
@@ -15,7 +22,7 @@
 ### Deploy Minio
 
     kubectl create ns minio
-    kubectl -n minio create secret generic minio-creds --from-literal=MINIO_ACCESS_KEY=MINIO_ACCESS_KEY --from-literal=MINIO_SECRET_KEY=MINIO_SECRET_KEY
+    kubectl -n minio create secret generic minio-creds --from-literal=MINIO_ACCESS_KEY=$MINIO_ACCESS_KEY --from-literal=MINIO_SECRET_KEY=$MINIO_SECRET_KEY
     kubectl apply -n minio -f minio.yaml
 
 ### Deploy InfluxDB
@@ -94,3 +101,15 @@ Connect to InfluxDB on http://influxdb.influxdb.svc.cluster.local:8086 from with
 Connect to Prometheus server on http://localhost:9090 URL by running these commands:
     
     kubectl --namespace prometheus port-forward service/prometheus-server 9090:80
+
+
+## Integrate these applications with jmeter-icap
+
+Create a kubernetes secret with key-value pairs required by the jmeter-icap in the namespace where jmeter-icap k8s jobs will run. 
+For example, we need Minio access key and secret key as environment variables inside the jmeter-icap container.
+
+Create a secret by running below command
+
+    `kubectl -n default create secret generic minio-creds-secret --from-literal=MINIO_ACCESS_KEY=$MINIO_ACCESS_KEY --from-literal=MINIO_SECRET_KEY=$MINIO_SECRET_KEY`    
+
+Use this secret in the k8s job/pod to set the required environment variables.
