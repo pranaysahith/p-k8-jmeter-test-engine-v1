@@ -32,6 +32,13 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.PACKAGE_SECRET }}
 
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1.3.0
+        with:
+          registry: docker.pkg.github.com
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.PACKAGE_SECRET }}
+
       - name: Build and push
         id: docker_build
         uses: docker/build-push-action@v2
@@ -40,25 +47,8 @@ jobs:
           file: src/controller/docker-jmeter-c-icap/Dockerfile
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/p-k8-jmeter-test-engine-v1:latest
-            ghcr.io/${{ github.repository_owner }}/p-k8-jmeter-test-engine-v1:0.0.1
+            docker.pkg.github.com/${{ github.repository_owner }}/p-k8-jmeter-test-engine-v1/jmeter-icap:latest
+            docker.pkg.github.com/${{ github.repository_owner }}/p-k8-jmeter-test-engine-v1/jmeter-icap:0.0.1
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
-
-      - name: install kubectl
-        uses: azure/setup-kubectl@v1
-        with:
-          version: 'latest'
-        id: install_kubectl
-
-      - uses: azure/k8s-set-context@v1
-        with:
-          method: service-account
-          k8s-url: ${{ secrets.K8S_URL }}
-          k8s-secret: ${{ secrets.K8S_SECRET }}
-        id: setcontext
-
-      - name: get_namespaces
-        run: |
-          kubectl get ns
