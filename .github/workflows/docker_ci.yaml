@@ -37,7 +37,7 @@ jobs:
           REPOSITORY: ${{ github.repository_owner }}/p-k8-jmeter-test-engine-v1/jmeter-icap
         run: |
           # Build a docker container and push it to ECR so that it can be deployed to K8s.
-          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+          docker login $REGISTRY -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
           docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f src/controller/docker-jmeter-c-icap/Dockerfile src/controller/docker-jmeter-c-icap/Dockerfile
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$REGISTRY/$REPOSITORY:$IMAGE_TAG"
