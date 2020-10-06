@@ -38,7 +38,7 @@ jobs:
         run: |
           # Build a docker container and push it to ECR so that it can be deployed to K8s.
           docker login $REGISTRY -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f src/controller/docker-jmeter-c-icap/Dockerfile src/controller/docker-jmeter-c-icap/Dockerfile
+          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -f src/controller/docker-jmeter-c-icap/Dockerfile src/controller/docker-jmeter-c-icap
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$REGISTRY/$REPOSITORY:$IMAGE_TAG"
           docker logout
