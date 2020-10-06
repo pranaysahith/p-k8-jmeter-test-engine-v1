@@ -27,7 +27,7 @@ jobs:
           context: src/controller/docker-jmeter-c-icap
           file: src/controller/docker-jmeter-c-icap/Dockerfile
           push: true
-          tags: docker.pkg.github.com/pranaysahith/p-k8-jmeter-test-engine-v1/jmeter-icap:0.0.1
+          tags: jmeter-icap:0.0.1
 
       - name: install kubectl
         uses: azure/setup-kubectl@v1
