@@ -14,18 +14,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-
-      # - name: Build and push
-      #   id: docker_build
-      #   uses: docker/build-push-action@v1
-      #   with:
-      #     path: src/controller/docker-jmeter-c-icap
-      #     dockerfile: src/controller/docker-jmeter-c-icap/Dockerfile
-      #     username: ${{ secrets.DOCKER_USERNAME }}
-      #     password: ${{ secrets.DOCKER_PASSWORD }}
-      #     repository: ${{ github.repository_owner }}/p-k8-jmeter-test-engine-v1/jmeter-icap
-      #     registry: docker.pkg.github.com
-      #     tag_with_ref: true
       
       - name: Build, tag, and push image to github packages
         id: build-image
@@ -43,6 +31,6 @@ jobs:
           echo "::set-output name=image::$REGISTRY/$REPOSITORY:$IMAGE_TAG"
           docker logout
           
-      - name: Docker logout
+      - name: Docker logout when build fails
         if: ${{ failure() }}
         run: docker logout

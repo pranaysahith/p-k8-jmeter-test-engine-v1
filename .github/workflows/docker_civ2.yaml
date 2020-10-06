@@ -5,11 +5,11 @@ on:
     paths-ignore:
     - 'upwork-devs/**'
     branches:
-    - delete_me
+    - github_actions
 
 jobs:
   tests:
-    name: Build and Push jmeter docker image
+    name: Run tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -23,8 +23,12 @@ jobs:
         with:
           buildkitd-flags: --debug
 
-      - name: Set up containerd
-        uses: crazy-max/ghaction-setup-containerd@v1
+      - name: Login to GitHub Package Container Registry
+        uses: docker/login-action@v1.3.0
+        with:
+          registry: docker.pkg.github.com
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.PACKAGE_SECRET }}
 
       - name: Build and push
         id: docker_build
@@ -32,15 +36,10 @@ jobs:
         with:
           context: src/controller/docker-jmeter-c-icap
           file: src/controller/docker-jmeter-c-icap/Dockerfile
+          push: true
           tags: |
             docker.pkg.github.com/${{ github.repository_owner }}/p-k8-jmeter-test-engine-v1/jmeter-icap:latest
             docker.pkg.github.com/${{ github.repository_owner }}/p-k8-jmeter-test-engine-v1/jmeter-icap:0.0.2
-          outputs: type=oci,dest=/tmp/image.tar
 
-      - name: Import image in containerd
-        run: |
-          sudo ctr i import --base-name docker.pkg.github.com/${{ github.repository_owner }}/p-k8-jmeter-test-engine-v1/jmeter-icap --digests --all-platforms /tmp/image.tar
-      
-      - name: Push image with containerd
-        run: |
-          sudo ctr i push --user "${{ secrets.DOCKER_USERNAME }}:${{ secrets.DOCKER_PASSWORD }}" docker.pkg.github.com/${{ github.repository_owner }}/p-k8-jmeter-test-engine-v1/jmeter-icap:latest
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
