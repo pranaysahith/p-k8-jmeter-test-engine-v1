@@ -28,6 +28,8 @@ jobs:
           file: src/controller/docker-jmeter-c-icap/Dockerfile
           push: true
           tags: jmeter-icap:0.0.1
+          secrets: |
+            GIT_AUTH_TOKEN=${{ secrets.PACKAGE_SECRET }}
 
       - name: install kubectl
         uses: azure/setup-kubectl@v1
