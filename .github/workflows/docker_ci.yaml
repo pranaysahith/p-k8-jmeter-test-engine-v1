@@ -9,7 +9,7 @@ on:
 
 jobs:
   tests:
-    name: Run tests
+    name: Build and Push jmeter docker image
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
