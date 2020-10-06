@@ -27,9 +27,9 @@ jobs:
           context: src/controller/docker-jmeter-c-icap
           file: src/controller/docker-jmeter-c-icap/Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/p-k8-jmeter-test-engine-v1:0.0.1
-          secrets: |
-            GIT_AUTH_TOKEN=${{ secrets.PACKAGE_SECRET }}
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/p-k8-jmeter-test-engine-v1:0.0.1
+            ghcr.io/${{ github.repository_owner }}/p-k8-jmeter-test-engine-v1:latest
 
       - name: install kubectl
         uses: azure/setup-kubectl@v1
