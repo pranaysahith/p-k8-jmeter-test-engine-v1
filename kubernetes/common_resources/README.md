@@ -3,7 +3,7 @@
 ### Deploy grafana
 
     kubectl create ns grafana
-    kubectl create secret grafana-creds -n grafana --from-literal=username=$GF_USERNAME --from-literal=password=$GF_PASSWORD
+    kubectl -n grafana create secret generic grafana-creds --from-literal=username=GF_USERNAME --from-literal=password=GF_PASSWORD
     kubectl apply -n grafana -f grafana.yaml
 
 ### Deploy ELK
@@ -15,7 +15,7 @@
 ### Deploy Minio
 
     kubectl create ns minio
-    kubectl create secret minio-creds -n minio --from-literal=MINIO_ACCESS_KEY=$MINIO_ACCESS_KEY --from-literal=MINIO_SECRET_KEY=$MINIO_SECRET_KEY
+    kubectl -n minio create secret generic minio-creds --from-literal=MINIO_ACCESS_KEY=MINIO_ACCESS_KEY --from-literal=MINIO_SECRET_KEY=MINIO_SECRET_KEY
     kubectl apply -n minio -f minio.yaml
 
 ### Deploy InfluxDB
@@ -30,7 +30,7 @@
     helm repo update
     helm upgrade --install -n prometheus prometheus stable/prometheus
 
-## Setup connection to k8s cluster in Github repo
+## Setup connection to k8s cluster in Github repo to deploy using Github Actions
 
 1. Create a service account with cluster-admin clusterrole which will be used in Github Actions
 
@@ -43,7 +43,7 @@
 * K8S_SECRET - Get service account's secret in json format using `kubectl get secret cd-pipeline-token-bjmml -n default -o json`
 
 
-## Grafana
+### Grafana
 Set below secrets in Github project before running Github workflow to deploy Grafana
 
 1. GF_USERNAME
@@ -55,10 +55,10 @@ Connect to Grafana on http://localhost:3000 by running below commands
 
 Connect to Grafana on http://grafana.grafana.svc.cluster.local:3000 from within the cluster
 
-## ELK
+### ELK
 Connect to Elastic and Kibana using below commands
 
-### Check the credentials
+#### Check the credentials
 Username: elastic Password: see command below
 
     kubectl get secret quickstart-es-elastic-user -o go-template='{{.data.elastic | base64decode}}'
@@ -69,7 +69,7 @@ Connect to Kibana on https://localhost:5601 by running below command
 
 Connect to Kibana on https://quickstart-kb-http.elk.svc.cluster.local:5601 from within the cluster
 
-## Minio
+### Minio
 Set below secrets in Github project before running Github workflow to deploy Minio
 
 1. MINIO_ACCESS_KEY
@@ -81,7 +81,7 @@ Connect to Minio on http://localhost:9000 by running below commands
 
 Connect to Minio on http://minio.minio.svc.cluster.local:9000 from within the cluster
 
-## InfluxDB
+### InfluxDB
 
 Connect to InfluxDB on http://localhost:8086 by running below commands
 
@@ -89,7 +89,7 @@ Connect to InfluxDB on http://localhost:8086 by running below commands
 
 Connect to InfluxDB on http://influxdb.influxdb.svc.cluster.local:8086 from within the cluster
 
-## Prometheus
+### Prometheus
 
 Connect to Prometheus server on http://localhost:9090 URL by running these commands:
     
