@@ -36,8 +36,8 @@ jobs:
           file: src/controller/docker-jmeter-c-icap/Dockerfile
           push: true
           tags: |
-            docker.pkg.github.com/${{ github.repository }}/jmeter-icap:latest
-            docker.pkg.github.com/${{ github.repository }}/jmeter-icap:0.0.1
+            docker.pkg.github.com/${{ github.repository_owner }}/p-k8-jmeter-test-engine-v1/jmeter-icap:latest
+            docker.pkg.github.com/${{ github.repository_owner }}/p-k8-jmeter-test-engine-v1/jmeter-icap:0.0.1
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
