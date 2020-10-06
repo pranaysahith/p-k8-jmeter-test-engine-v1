@@ -1,8 +1,10 @@
-**k8-jmeter-test-engine-v1**
+**k8-jmeter-test-engine**
 
 **Project brief**
 
-**Objective:** A first version of the Kubernetes (K8) native application able to generate up to 100000 concurrent requests directly to the ICAP server using the c-icap client.
+**k8-jmeter-test-engine-v1**
+
+A first version of the Kubernetes (K8) native application able to generate up to 100000 concurrent requests directly to the ICAP server using the c-icap client.
 
 **Requirements:**
 
@@ -10,8 +12,37 @@
 - Configured K8 cluster with a traffic generator and Docker image to generate the number of pods based on the scenario &amp; load scripts in the JMeter test plan.
 - Implemented input mechanism to retrieve required file for processing from MinIO
 - Implemented assertion mechanism that validates the response code returned
-- Implemented Elasticsearch logging solution to visualize the performance metrics
-- Implemented monitoring feature using Kibana for result dashboard display
+- Implemented Elasticsearch or InfluxDB logging solution to visualize the performance metrics
+- Implemented monitoring feature using Grafana or Kibana for result dashboard display
+
+
+**K8s V1 Infrastructure**
+
+- The traffic generator will pick up a scenario &amp; files, generate pods to execute all the instructions in the scenario file
+- The JMeter results are sent to MinIO for storage
+- The logs, response times, throughput and error metrics etc. are sent to the Elastic logging pod
+- The metrics are sent to &amp; displayed on Kibana dashboard
+
+
+
+**k8-jmeter-test-engine-v2**
+
+Additional features to the V1 version of the Kubernetes (K8) native application to allow testing with traffic generated against the test website: SharePoint
+
+**Requirements:**
+- Configured web automation module executed inside pods in the K8 cluster with a traffic generator to simulate users for upload & download of files via SharePoint 
+- A scenario file defined with the action to be taken:(Navigate to Sharepoint, login, upload or download a file) and the files to be used using define test scenarios
+- Implemented assertion mechanism that validates that the downloaded/uploaded file is clean
+- Make use of the k8-test-engine v1 assertion mechanism that validates the response code returned
+- Make use of the k8-test-engine v1 logging solution to visualize the performance metrics 
+- Make use of the k8-test-engine v1 monitoring feature using Grafana for result dashboard display
+
+**K8s V2 Infrastructure**
+
+- The traffic generator will pick up a scenario & files, generate pods to execute all the instructions in the scenario file
+- The results(response times, throughput and error metrics etc) are sent to Influx DB
+- The metrics are sent to & displayed on Grafana dashboard
+
 
 **Metrics to monitor:**
 
@@ -49,18 +80,13 @@
 - Number of files processed
 - Number of concurrent requests processed
 
-**K8s Infrastructure**
 
-- The traffic generator will pick up a scenario &amp; files, generate pods to execute all the instructions in the scenario file
-- The JMeter results are sent to MinIO for storage
-- The logs, response times, throughput and error metrics etc. are sent to the Elastic logging pod
-- The metrics are sent to &amp; displayed on Kibana dashboard
 
 **Success Criteria:**
 
 - The solution setup details are clearly documented with required step by step information and scripts to run
-- The solution satisfies all the above defined requirements
+- The solution contains both versions and satisfies all the above defined requirements
 - Use of GitHub Actions CI/CD
-- The test engine can be started with minimal configuration and run tests with 1 command
+- The test engine can be started with minimal configuration and run tests with 1 command based on test requirement
 - The test engine can run up to 4 million requests to generate up to 100k concurrent requests with use of few files
 - Ability to run a continuous heartbeat test successfully with a continuous view of the performance dashboard
