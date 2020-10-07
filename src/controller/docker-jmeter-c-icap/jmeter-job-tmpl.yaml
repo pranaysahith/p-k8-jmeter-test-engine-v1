@@ -13,6 +13,8 @@ spec:
       labels:
         jobgroup: jmeter  
     spec:
+      imagePullSecrets:
+      - name: docker-secret
       containers:
       - name: jmeter
         image: ggrig/jmeter-c-icap:1.1
@@ -23,7 +25,7 @@ spec:
           limits:
             memory: "1024Mi"
             cpu: "1000m"        
-        #imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         env:
           # Source Minio Infromation
           - name: TARGET_MINIO_URL
