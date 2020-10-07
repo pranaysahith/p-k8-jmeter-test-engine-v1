@@ -22,9 +22,9 @@ EXPOSE 1344
 
 ENV PATH $PATH:${JMETER_BIN}
 COPY ./Test /usr/share/Test/
-COPY ./jmeter-conf.jmx /etc/conf/
+COPY ./icap.jmx /etc/conf/jmeter-conf.jmx
 
-RUN chmod +x /usr/share
+RUN chmod -R +x /usr/share/Test
 #ENTRYPOINT ["/usr/share/Test/launch.sh"]
 
 COPY requirement.txt .
