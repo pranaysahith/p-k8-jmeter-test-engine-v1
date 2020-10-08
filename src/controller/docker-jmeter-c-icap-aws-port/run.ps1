@@ -10,16 +10,17 @@ if (-not (Test-Path "jmeter-jobs")) {
     write-host "Jobs directory has been created"
 }
 
-if (Test-Path ".\jmeter-conf.jmx") {
-    rm ".\jmeter-conf.jmx"
+if (Test-Path ".\files") {
+    rm ".\files"
     write-host "Previous version of the config file has been removed"
 }
 
-cp $CONFIG_FILE jmeter-conf.jmx
+cp $CONFIG_FILE files
+
 
 kubectl delete --ignore-not-found jobs -l jobgroup=jmeter
 kubectl delete --ignore-not-found secret jmeterconf
-kubectl create secret generic jmeterconf --from-file=jmeter-conf.jmx
+kubectl create secret generic jmeterconf --from-file=files
 
 for ( $i = 0; $i -lt $NUMBER_OF_JOBS; $i++ ) {
     write-host "Submitting job $i"
@@ -33,4 +34,4 @@ for ( $i = 0; $i -lt $NUMBER_OF_JOBS; $i++ ) {
     rm ".\jmeter-jobs\job-$i.yaml"
 }
 
-rm jmeter-conf.jmx
+rm files
