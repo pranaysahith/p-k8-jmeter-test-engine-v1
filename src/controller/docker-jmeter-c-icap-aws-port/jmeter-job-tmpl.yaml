@@ -65,7 +65,7 @@ spec:
         #command: [ "/bin/sh", "-c", "/mnt/workspace/jmeter.sh" ]
         volumeMounts:
         - name: jmetervol
-          mountPath: "/etc/data"
+          mountPath: "/usr/share/data"
           readOnly: true
       volumes:
       - name: jmetervol

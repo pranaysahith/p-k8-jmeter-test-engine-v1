@@ -20,7 +20,7 @@ mkdir -p ${R_DIR}
 echo "JVM_ARGS=${JVM_ARGS}"
 
 /usr/local/apache-jmeter-5.3/bin/jmeter -n \
-        -t /etc/conf/jmeter-conf.jmx \
+        -t /etc/jmeter-conf.jmx \
         -l ${R_DIR}/icap.jtl \
         -j ${R_DIR}/jmeter.log
 echo "END Running Jmeter on `date`"

@@ -22,9 +22,10 @@ EXPOSE 1344
 
 ENV PATH $PATH:${JMETER_BIN}
 COPY ./Test /usr/share/Test/
-COPY ./ICAP-POC_s3.jmx /etc/conf/jmeter-conf.jmx
+COPY ./ICAP-POC_s3.jmx /etc/jmeter-conf.jmx
 
 RUN chmod +x /usr/share
+RUN chmod +x /usr/share/Test/launch.sh
 
 COPY requirement.txt .
 
