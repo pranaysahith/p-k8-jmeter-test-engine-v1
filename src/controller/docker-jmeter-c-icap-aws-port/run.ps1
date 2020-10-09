@@ -20,7 +20,9 @@ cp $CONFIG_FILE files
 
 kubectl delete --ignore-not-found jobs -l jobgroup=jmeter
 kubectl delete --ignore-not-found secret jmeterconf
+kubectl delete --ignore-not-found secret filesconf
 kubectl create secret generic jmeterconf --from-file=files
+kubectl create secret generic filesconf --from-file=files
 
 for ( $i = 0; $i -lt $NUMBER_OF_JOBS; $i++ ) {
     write-host "Submitting job $i"

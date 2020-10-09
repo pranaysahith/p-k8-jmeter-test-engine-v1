@@ -65,10 +65,16 @@ spec:
         #command: [ "/bin/sh", "-c", "/mnt/workspace/jmeter.sh" ]
         volumeMounts:
         - name: jmetervol
+          mountPath: "/usr/share/jmx"
+          readOnly: true
+        - name: filesvol
           mountPath: "/usr/share/data"
           readOnly: true
       volumes:
       - name: jmetervol
         secret:
           secretName: jmeterconf          
+      - name: filesvol
+        secret:
+          secretName: filesconf
       restartPolicy: Never
