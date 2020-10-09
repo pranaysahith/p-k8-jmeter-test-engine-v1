@@ -1,7 +1,12 @@
-param ([string] $CONFIG_FILE, [int] $NUMBER_OF_JOBS)
+param ([string] $CONFIG_FILE, [string] $FILES_LIST, [int] $NUMBER_OF_JOBS)
 
 if (-not (Test-Path $CONFIG_FILE)) {
     write-host "Config file $($CONFIG_FILE) does not exist"
+    exit
+}
+
+if (-not (Test-Path $FILES_LIST)) {
+    write-host "Files list $($FILES_LIST) does not exist"
     exit
 }
 
@@ -11,17 +16,22 @@ if (-not (Test-Path "jmeter-jobs")) {
 }
 
 if (Test-Path ".\files") {
-    rm ".\files"
-    write-host "Previous version of the config file has been removed"
+    rm .\files
+    write-host "Previous version of the file list has been removed"
 }
 
-cp $CONFIG_FILE files
+if (Test-Path ".\jmeter-conf.jmx") {
+    rm .\jmeter-conf.jmx
+    write-host "Previous version of the JMX config file has been removed"
+}
 
+cp $CONFIG_FILE jmeter-conf.jmx
+cp $FILES_LIST files
 
 kubectl delete --ignore-not-found jobs -l jobgroup=jmeter
 kubectl delete --ignore-not-found secret jmeterconf
 kubectl delete --ignore-not-found secret filesconf
-kubectl create secret generic jmeterconf --from-file=files
+kubectl create secret generic jmeterconf --from-file=jmeter-conf.jmx
 kubectl create secret generic filesconf --from-file=files
 
 for ( $i = 0; $i -lt $NUMBER_OF_JOBS; $i++ ) {
@@ -36,4 +46,5 @@ for ( $i = 0; $i -lt $NUMBER_OF_JOBS; $i++ ) {
     rm ".\jmeter-jobs\job-$i.yaml"
 }
 
-rm files
+rm .\jmeter-conf.jmx
+rm .\files
