@@ -20,12 +20,12 @@ mkdir -p ${R_DIR}
 echo "JVM_ARGS=${JVM_ARGS}"
 
 /usr/local/apache-jmeter-5.3/bin/jmeter -n \
-        -t /usr/share/Test/ICAP-POC_s3.jmx \
+        -t /usr/share/jmx/jmeter-conf.jmx \
         -l ${R_DIR}/icap.jtl \
         -j ${R_DIR}/jmeter.log
 echo "END Running Jmeter on `date`"
 
-while true
-do
-	sleep 1
-done
+#while true
+#do
+#	sleep 1
+#done

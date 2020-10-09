@@ -23,7 +23,6 @@ EXPOSE 1344
 ENV PATH $PATH:${JMETER_BIN}
 COPY ./Test /usr/share/Test/
 COPY ./Test/py /usr/share/Test/
-COPY ./ICAP-POC_s3.jmx /usr/share/Test/
 
 RUN chmod +x /usr/share
 RUN chmod +x /usr/share/Test/launch.sh
