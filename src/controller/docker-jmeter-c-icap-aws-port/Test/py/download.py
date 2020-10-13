@@ -12,10 +12,15 @@ logger = logging.getLogger('file processor')
 file_path = '/usr/share/Test/input/'
 rebuild_path = '/output/Managed/'
 
-SRC_URL = os.getenv('SOURCE_MINIO_URL', 'http://192.168.1.4:9000')
-SRC_ACCESS_KEY = os.getenv('SOURCE_MINIO_ACCESS_KEY', 'test')
-SRC_SECRET_KEY = os.getenv('SOURCE_MINIO_SECRET_KEY', 'test@123')
-SRC_BUCKET = os.getenv('SOURCE_MINIO_BUCKET', 'input')
+#SRC_URL = os.getenv('SOURCE_MINIO_URL', 'http://output-queue:9000')
+#SRC_ACCESS_KEY = os.getenv('SOURCE_MINIO_ACCESS_KEY', 'test')
+#SRC_SECRET_KEY = os.getenv('SOURCE_MINIO_SECRET_KEY', 'test@123')
+#SRC_BUCKET = os.getenv('SOURCE_MINIO_BUCKET', 'input')
+
+SRC_URL = os.getenv('TARGET_MINIO_URL', 'http://192.168.1.4:9000')
+SRC_ACCESS_KEY = os.getenv('TARGET_MINIO_ACCESS_KEY', 'test')
+SRC_SECRET_KEY = os.getenv('TARGET_MINIO_SECRET_KEY', 'test@123')
+SRC_BUCKET = 'input'
 
 LOG_LEVEL = os.getenv('LOG_LEVEL', 'INFO').upper()
 

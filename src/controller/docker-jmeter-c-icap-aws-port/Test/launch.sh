@@ -4,6 +4,7 @@
 #
 # This script expects the standdard JMeter command parameters.
 #
+
 set -e
 freeMem=`awk '/MemFree/ { print int($2/1024) }' /proc/meminfo`
 s=$(($freeMem/10*8))
@@ -25,7 +26,7 @@ echo "JVM_ARGS=${JVM_ARGS}"
         -j ${R_DIR}/jmeter.log
 echo "END Running Jmeter on `date`"
 
-#while true
-#do
-#	sleep 1
-#done
+while true
+do
+	sleep 1
+done

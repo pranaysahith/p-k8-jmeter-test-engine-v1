@@ -31,5 +31,4 @@ COPY requirement.txt .
 
 RUN pip3 install -r requirement.txt --user
 
-#CMD ["python3", "processor.py"]
 ENTRYPOINT ["/usr/share/Test/launch.sh"]
