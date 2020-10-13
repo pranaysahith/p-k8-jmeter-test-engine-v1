@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: jmeter
-        image: ggrig/jmeter-c-icap:2.2
+        image: ggrig/jmeter-c-icap:2.3
         resources:
           requests:
             memory: "900Mi"
@@ -37,6 +37,7 @@ spec:
           # Log Level (Default to Info)
           - name: LOG_LEVEL
             value: info
+          # Environment info
           - name: MY_NODE_NAME
             valueFrom:
               fieldRef:
@@ -57,6 +58,9 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: spec.serviceAccountName
+          # JVM
+          #- name: ENV_JVM_ARGS
+          #  value: "-Xmn128m -Xms512m -Xmx512m"
         #env:
         #  - name: MINIO_ACCESS_KEY
         #    valueFrom:

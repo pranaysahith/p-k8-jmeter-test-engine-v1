@@ -404,7 +404,7 @@ log.info(&quot;File copied to in. &quot;+s3cp);
           <stringProp name="ActionProcessor.duration">${__Random(2000,10000,)}</stringProp>
         </TestAction>
         <hashTree/>
-        <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="ICAP-CleanOutFile" enabled="true">
+        <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="ICAP-CleanOutFile" enabled="false">
           <boolProp name="TransactionController.includeTimers">false</boolProp>
           <boolProp name="TransactionController.parent">true</boolProp>
         </TransactionController>
