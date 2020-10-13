@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: jmeter
-        image: ggrig/jmeter-c-icap:2.1
+        image: ggrig/jmeter-c-icap:2.2
         #imagePullPolicy: Always
         env:
           # Source Minio Infromation
