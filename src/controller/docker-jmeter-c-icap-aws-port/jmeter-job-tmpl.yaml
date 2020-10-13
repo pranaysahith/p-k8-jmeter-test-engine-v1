@@ -28,10 +28,20 @@ spec:
           # Source Minio Infromation
           - name: TARGET_MINIO_URL
             value: "http://output-queue:9000"
-          - name: TARGET_MINIO_ACCESS_KEY
-            value: test
-          - name: TARGET_MINIO_SECRET_KEY
-            value: test@123
+#          - name: TARGET_MINIO_ACCESS_KEY
+#            value: test
+#          - name: TARGET_MINIO_SECRET_KEY
+#            value: test@123
+          - name: MINIO_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: minio-creds-secret
+                key: accesskey
+          - name: MINIO_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: minio-creds-secret
+                key: secretkey
           - name: TARGET_MINIO_BUCKET
             value: output
           # Log Level (Default to Info)
@@ -62,16 +72,6 @@ spec:
           #- name: ENV_JVM_ARGS
           #  value: "-Xmn128m -Xms512m -Xmx512m"
         #env:
-        #  - name: MINIO_ACCESS_KEY
-        #    valueFrom:
-        #      secretKeyRef:
-        #        name: minio-creds-secret
-        #        key: accesskey 
-        #  - name: MINIO_SECRET_KEY
-        #    valueFrom:
-        #      secretKeyRef:
-        #        name: minio-creds-secret
-        #        key: secretkey           
         #workingDir: /mnt/workspace
         #command: [ "/bin/sh", "-c", "/mnt/workspace/jmeter.sh" ]
         volumeMounts:
