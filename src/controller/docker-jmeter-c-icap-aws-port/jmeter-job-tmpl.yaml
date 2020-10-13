@@ -15,8 +15,15 @@ spec:
     spec:
       containers:
       - name: jmeter
-        image: ggrig/jmeter-c-icap:2.1
-        #imagePullPolicy: Always
+        image: ggrig/jmeter-c-icap:2.2
+        resources:
+          requests:
+            memory: "900Mi"
+            cpu: "500m"
+          limits:
+            memory: "900Mi"
+            cpu: "500m"
+        imagePullPolicy: IfNotPresent
         env:
           # Source Minio Infromation
           - name: TARGET_MINIO_URL
