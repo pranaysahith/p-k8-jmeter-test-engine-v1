@@ -6,7 +6,6 @@ on:
     - 'upwork-devs/**'
     branches:
     - master
-    - testci
 
 jobs:
   deploy:
