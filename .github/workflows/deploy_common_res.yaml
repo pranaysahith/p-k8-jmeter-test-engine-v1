@@ -5,7 +5,7 @@ on:
     paths-ignore:
     - 'upwork-devs/**'
     branches:
-    - update_me
+    - master
 
 jobs:
   deploy:
@@ -38,10 +38,10 @@ jobs:
       - name: Create namespaces
         run: |
           kubectl get ns grafana || kubectl create ns grafana
-          kubectl get ns elk || kubectl create ns elk
+          # kubectl get ns elk || kubectl create ns elk
           kubectl get ns minio || kubectl create ns minio
           kubectl get ns prometheus || kubectl create ns prometheus
-          kubectl get ns inlufxdb || kubectl create ns inlufxdb
+          kubectl get ns influxdb || kubectl create ns influxdb
 
       - name: Create secret with grafana creds
         uses: azure/k8s-create-secret@v1
@@ -59,14 +59,14 @@ jobs:
               kubernetes/common_resources/grafana.yaml
           kubectl-version: 'latest'
 
-      - name: Deploy ELK
-        uses: Azure/k8s-deploy@v1
-        with:
-          namespace: elk
-          manifests: |
-            kubernetes/common_resources/elk/tenant_multipod.yaml
-            kubernetes/common_resources/elk/tenant.yaml
-          kubectl-version: 'latest'
+      # - name: Deploy ELK
+      #   uses: Azure/k8s-deploy@v1
+      #   with:
+      #     namespace: elk
+      #     manifests: |
+      #       kubernetes/common_resources/elk/tenant_multipod.yaml
+      #       kubernetes/common_resources/elk/tenant.yaml
+      #     kubectl-version: 'latest'
 
       - name: Create secret with minio creds
         uses: azure/k8s-create-secret@v1
@@ -75,6 +75,14 @@ jobs:
           secret-type: 'generic'
           arguments:  --from-literal=MINIO_ACCESS_KEY=${{ secrets.MINIO_ACCESS_KEY }} --from-literal=MINIO_SECRET_KEY=${{ secrets.MINIO_SECRET_KEY }}
           secret-name: minio-creds
+
+      - name: Create secret with minio creds in default namespace
+        uses: azure/k8s-create-secret@v1
+        with:
+          namespace: 'default'
+          secret-type: 'generic'
+          arguments:  --from-literal=accesskey=${{ secrets.MINIO_ACCESS_KEY }} --from-literal=secretkey=${{ secrets.MINIO_SECRET_KEY }}
+          secret-name: minio-creds-secret   
 
       - name: Deploy Minio
         uses: Azure/k8s-deploy@v1
