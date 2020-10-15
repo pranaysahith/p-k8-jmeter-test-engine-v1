@@ -1,17 +1,17 @@
 # ICAP+JMeter Dockerfile
 
-## Minio
-### Deploy Services
-This following deploys Minio and InfluxDB in the cluster
+## Access Minio
+Run below command to do port forwarding in order to access minio locally
 ```
-    powershell -ExecutionPolicy ByPass -File .\deploy-services.ps1
+kubectl port-forward -n minio svc/minio 9000
 ```
-Minio can be accessed at `http://localhost:9000/`
-InfluxDB at `http://localhost:8086/`
-
-Minio credentials
-User: test
-PSW: test@123
+you can access minio using http://localhost:9000/
+## Access Grafana Dashboard
+Run below command to do port forwarding in order to access Grafana locally 
+```
+kubectl port-forward -n grafana service/grafana-service 3000
+```
+you can access grafana using http://localhost:3000/
 
 Create a Minio bucket called `input` and upload your test files there
 

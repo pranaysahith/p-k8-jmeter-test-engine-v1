@@ -21,13 +21,13 @@ spec:
       containers:
       - name: jmeter
         image: ggrig/jmeter-c-icap:2.3
-        resources:
-          requests:
-            memory: "900Mi"
-            cpu: "500m"
-          limits:
-            memory: "900Mi"
-            cpu: "500m"
+        # resources:
+        #   requests:
+        #     memory: "900Mi"
+        #     cpu: "500m"
+        #   limits:
+        #     memory: "900Mi"
+        #     cpu: "500m"
         imagePullPolicy: IfNotPresent
         env:
           # Source Minio Infromation
