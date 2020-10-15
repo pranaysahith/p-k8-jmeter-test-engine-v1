@@ -76,6 +76,14 @@ jobs:
           arguments:  --from-literal=MINIO_ACCESS_KEY=${{ secrets.MINIO_ACCESS_KEY }} --from-literal=MINIO_SECRET_KEY=${{ secrets.MINIO_SECRET_KEY }}
           secret-name: minio-creds
 
+      - name: Create secret with minio creds in default namespace
+        uses: azure/k8s-create-secret@v1
+        with:
+          namespace: 'default'
+          secret-type: 'generic'
+          arguments:  --from-literal=accesskey=${{ secrets.MINIO_ACCESS_KEY }} --from-literal=secretkey=${{ secrets.MINIO_SECRET_KEY }}
+          secret-name: minio-creds-secret   
+
       - name: Deploy Minio
         uses: Azure/k8s-deploy@v1
         with:
