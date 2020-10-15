@@ -1,28 +1,36 @@
 # ICAP+JMeter Dockerfile
 
 ## Minio
-### Deploy Minio
+### Deploy Services
+This following deploys Minio and InfluxDB in the cluster
 ```
-    powershell -ExecutionPolicy ByPass -File .\deploy-minio.ps1
+    powershell -ExecutionPolicy ByPass -File .\deploy-services.ps1
 ```
-This deploys Minio, opens it in the browser and starts a processor pod
-To login to Minio use the following credentials
+Minio can be accessed at `http://localhost:9000/`
+InfluxDB at `http://localhost:8086/`
+
+Minio credentials
 User: test
 PSW: test@123
-After a while the JMeter output files should appear in Minio
-### Remove Minio deployement
-```
-    powershell -ExecutionPolicy ByPass -File .\delete-minio.ps1
-```
+
+Create a Minio bucket called `input` and upload your test files there
+
+Create an influx DB database called `JMeter` on the influx DB POD
+
 ## JMeter Jobs
 ### Run
 On Windows 10 run the following from within the PowerShell
 ```
-    powershell -ExecutionPolicy ByPass -File run.ps1 <jmx_file> <number_of_pods>
+    powershell -ExecutionPolicy ByPass -File run.ps1 <jmeter-conf> <file_list> <number_of_pods>
 ```
-So, to start 10 JMeter jobs run:
+Where
+`jmeter-conf` is the JMeter file to be utilized in the test
+`file_list` is a text file containing the list of files to be handled during the test
+The files are to be uploaded to the Minio `input` bucket prior to the test start
+
+The following example will start 10 parallel JMeter jobs:
 ```
-    powershell -ExecutionPolicy ByPass -File run.ps1 .\icap.jmx 10
+    PowerShell -ExecutionPolicy ByPass -File run.ps1 ICAP-POC_s3.jmx files.txt 10
 ```
 ### Stop and remove 
 ```

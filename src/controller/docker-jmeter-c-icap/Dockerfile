@@ -22,17 +22,13 @@ EXPOSE 1344
 
 ENV PATH $PATH:${JMETER_BIN}
 COPY ./Test /usr/share/Test/
-COPY ./icap.jmx /etc/conf/jmeter-conf.jmx
+COPY ./Test/py /usr/share/Test/
 
-RUN chmod -R +x /usr/share/Test
-#ENTRYPOINT ["/usr/share/Test/launch.sh"]
+RUN chmod +x /usr/share
+RUN chmod +x /usr/share/Test/launch.sh
 
 COPY requirement.txt .
 
 RUN pip3 install -r requirement.txt --user
 
-COPY processor.py .
-
-COPY logging.conf .
-
-CMD ["python3", "processor.py"]
+ENTRYPOINT ["/usr/share/Test/launch.sh"]
