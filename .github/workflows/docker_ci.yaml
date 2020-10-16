@@ -24,7 +24,7 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
           REGISTRY: docker.pkg.github.com
-          REPOSITORY: ${{ env.GITHUB_REPOSITORY }}/jmeter-icap
+          REPOSITORY: ${{ github.repository }}/jmeter-icap
         run: |
           # Build a docker container and push it to ECR so that it can be deployed to K8s.
           docker login $REGISTRY -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
