@@ -6,7 +6,6 @@ on:
     - 'upwork-devs/**'
     branches:
     - master
-    - add_loki
 
 jobs:
   deploy:
