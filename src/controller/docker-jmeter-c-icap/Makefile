@@ -1,4 +1,4 @@
-image-name="ggrig/jmeter-c-icap:2.3"
+image-name="ggrig/jmeter-c-icap:2.4"
 
 build:
 	docker build -t $(image-name) .
@@ -7,7 +7,7 @@ run:
 	docker run -d $(image-name)
 
 tag:
-	docker tag ggrig/jmeter-c-icap ggrig/jmeter-c-icap:2.3
+	docker tag ggrig/jmeter-c-icap ggrig/jmeter-c-icap:2.4
 
 push:
-	docker push ggrig/jmeter-c-icap:2.3
+	docker push ggrig/jmeter-c-icap:2.4

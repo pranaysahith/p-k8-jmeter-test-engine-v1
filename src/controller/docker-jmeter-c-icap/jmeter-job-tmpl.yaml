@@ -70,8 +70,8 @@ spec:
               fieldRef:
                 fieldPath: spec.serviceAccountName
           # JVM
-          #- name: ENV_JVM_ARGS
-          #  value: "-Xmn128m -Xms512m -Xmx512m"
+          - name: JVM_ARGS
+            value: "-Xmn128m -Xms512m -Xmx512m"
         #env:
         #workingDir: /mnt/workspace
         #command: [ "/bin/sh", "-c", "/mnt/workspace/jmeter.sh" ]
