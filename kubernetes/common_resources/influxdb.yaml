@@ -118,10 +118,15 @@ spec:
           mountPath: /var/lib/influxdb
         - name: config
           mountPath: /etc/influxdb
+        - name: init-script
+          mountPath: /docker-entrypoint-initdb.d
       volumes:
       - name: config
         configMap:
           name: influxdb
+      - name: init-script
+        secret:
+          secretName: init-script
   volumeClaimTemplates:
     - metadata:
         name: influxdb-data
