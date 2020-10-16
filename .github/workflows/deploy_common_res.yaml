@@ -42,6 +42,7 @@ jobs:
           kubectl get ns minio || kubectl create ns minio
           kubectl get ns prometheus || kubectl create ns prometheus
           kubectl get ns influxdb || kubectl create ns influxdb
+          kubectl get ns loki-stack || kubectl create ns loki-stack
 
       - name: Create secret with grafana creds
         uses: azure/k8s-create-secret@v1
@@ -105,3 +106,9 @@ jobs:
           manifests: |
               kubernetes/common_resources/influxdb.yaml
           kubectl-version: 'latest'
+
+      - name: Deploy Loki
+        run: |
+          helm repo add loki https://grafana.github.io/loki/charts
+          helm repo update
+          helm upgrade --install loki --namespace=loki-stack loki/loki-stack

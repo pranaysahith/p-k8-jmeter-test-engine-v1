@@ -37,6 +37,14 @@ Set below environment variables with the values you like, in the terminal before
     helm repo update
     helm upgrade --install -n prometheus prometheus stable/prometheus
 
+### Deploy Loki
+
+    kubectl create ns loki-stack
+    helm repo add loki https://grafana.github.io/loki/charts
+    helm repo update
+    helm upgrade --install loki --namespace=loki-stack loki/loki-stack
+
+
 ## Setup connection to k8s cluster in Github repo to deploy using Github Actions
 
 1. Create a service account with cluster-admin clusterrole which will be used in Github Actions
@@ -101,6 +109,14 @@ Connect to InfluxDB on http://influxdb.influxdb.svc.cluster.local:8086 from with
 Connect to Prometheus server on http://localhost:9090 URL by running these commands:
     
     kubectl --namespace prometheus port-forward service/prometheus-server 9090:80
+
+### Loki
+
+Connect to loki server on http://localhost:3100 URL by running below command:
+
+    kubectl --namespace loki-stack port-forward service/loki 3100:3100
+
+Connect to Loki on http://loki.loki-stack.svc.cluster.local:3100 from grafana and anywhere from the cluster.
 
 
 ## Integrate these applications with jmeter-icap
