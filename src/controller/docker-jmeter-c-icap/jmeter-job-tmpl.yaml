@@ -20,13 +20,13 @@ spec:
       #    - "minio.minio.svc.cluster.local"
       containers:
       - name: jmeter
-        image: ggrig/jmeter-c-icap:2.3
+        image: ggrig/jmeter-c-icap:2.4
         resources:
           requests:
-            memory: "900Mi"
-            cpu: "500m"
+            memory: "768Mi"
+            cpu: "300m"
           limits:
-            memory: "900Mi"
+            memory: "768Mi"
             cpu: "500m"
         imagePullPolicy: IfNotPresent
         env:
