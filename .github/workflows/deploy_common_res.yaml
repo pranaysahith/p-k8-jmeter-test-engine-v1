@@ -105,7 +105,7 @@ jobs:
         with:
           namespace: 'influxdb'
           secret-type: 'generic'
-          arguments:  --from-file=kubernetes/common_resources/init-influxdb.iql
+          arguments:  --from-file=kubernetes/common_resources/influxdb/init-influxdb.iql
           secret-name: init-script
       
       - name: Deploy InfluxDB
@@ -113,7 +113,7 @@ jobs:
         with:
           namespace: 'influxdb'
           manifests: |
-              kubernetes/common_resources/influxdb.yaml
+              kubernetes/common_resources/influxdb/influxdb.yaml
           kubectl-version: 'latest'
 
       - name: Deploy Loki

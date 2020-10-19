@@ -28,7 +28,8 @@ Set below environment variables with the values you like, in the terminal before
 ### Deploy InfluxDB
 
     kubectl create ns influxdb
-    kubectl apply -n influxdb -f influxdb.yaml
+    kubectl create secret generic init-script -n influxdb --from-file=influxdb/init-influxdb.iql
+    kubectl apply -n influxdb -f influxdb/influxdb.yaml
 
 ### Deploy Prometheus
 
@@ -100,7 +101,7 @@ Connect to Minio on http://minio.minio.svc.cluster.local:9000 from within the cl
 
 Connect to InfluxDB on http://localhost:8086 by running below commands
 
-    kubectl port-forward -n inlfuxdb service/influxdb 8086
+    kubectl port-forward -n influxdb service/influxdb 8086
 
 Connect to InfluxDB on http://influxdb.influxdb.svc.cluster.local:8086 from within the cluster
 
