@@ -129,3 +129,11 @@ Create a secret by running below command
     `kubectl -n default create secret generic minio-creds-secret --from-literal=MINIO_ACCESS_KEY=$MINIO_ACCESS_KEY --from-literal=MINIO_SECRET_KEY=$MINIO_SECRET_KEY`    
 
 Use this secret in the k8s job/pod to set the required environment variables.
+
+## Port forwarding
+
+To start port forwarding for minio, grafana and influxdb on Windows OS run the following in Windwos PowerShell
+
+```
+    PowerShell -ExecutionPolicy ByPass -File .\port-forwarding.ps1
+```
