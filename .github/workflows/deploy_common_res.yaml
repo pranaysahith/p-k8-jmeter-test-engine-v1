@@ -6,7 +6,6 @@ on:
     - 'upwork-devs/**'
     branches:
     - master
-    - test_github_actions
 
 jobs:
   deploy:
