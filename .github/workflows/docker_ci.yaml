@@ -7,7 +7,6 @@ on:
     - 'kubernetes/**'
     branches:
     - master
-    - test_github_actions
 
 jobs:
   tests:
