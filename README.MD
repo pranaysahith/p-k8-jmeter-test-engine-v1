@@ -4,7 +4,7 @@ A first version of the Kubernetes (K8) native application able to generate up to
 
 **Requirements:**
 
-- Azure Cli installed - https://docs.microsoft.com/pl-pl/cli/azure/
+- Azure cli installed - https://docs.microsoft.com/pl-pl/cli/azure/
 
 
 **Create Azure Kubernetes Service**
@@ -43,7 +43,7 @@ kubectl create clusterrolebinding kubernetes-dashboard --clusterrole=cluster-adm
 kubectl config view --raw
 az aks browse --resource-group $RESOURCEGROUPNAME --name $AKS_NAME
 ```
-**Create secondary node pool dedicated to the JMeter workloads.**
+**Create a secondary node pool dedicated to the JMeter workloads.**
 
 ``` bash
 kubectl config view --raw
@@ -51,7 +51,7 @@ az aks browse --resource-group $RESOURCEGROUPNAME --name $AKS_NAME
 az aks nodepool add --resource-group $RESOURCEGROUPNAME --cluster-name $AKS_NAME --name jmeter --node-count 1 --node-taints sku=jmeter:NoSchedule
 ```
 
-**Test Deployemnt**
+**Test Deployment**
 
 - Deploy to nodepool (default) 
 ``` bash
