@@ -15,7 +15,7 @@ $RESOURCEGROUPNAME="k8sk8s"
 $LOCATION="eastus"
 $AKS_NAME="k8s-test"
 $NODES="1"
-$MAXPODS="30"
+$MAXPODS="70"
 ```
 
 - Deploy Azure Kubernetes Service
@@ -46,9 +46,10 @@ az aks browse --resource-group $RESOURCEGROUPNAME --name $AKS_NAME
 **Create a secondary node pool dedicated to the JMeter workloads.**
 
 ``` bash
+$NODESJM="1"
 kubectl config view --raw
 az aks browse --resource-group $RESOURCEGROUPNAME --name $AKS_NAME
-az aks nodepool add --resource-group $RESOURCEGROUPNAME --cluster-name $AKS_NAME --name jmeter --node-count 1 --node-taints sku=jmeter:NoSchedule
+az aks nodepool add --resource-group $RESOURCEGROUPNAME --cluster-name $AKS_NAME --name jmeter --node-count $NODESJM --node-taints sku=jmeter:NoSchedule
 ```
 
 **Test Deployment**
