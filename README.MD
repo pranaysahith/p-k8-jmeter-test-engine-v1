@@ -6,7 +6,6 @@ A first version of the Kubernetes (K8) native application able to generate up to
 
 - Azure cli installed - https://docs.microsoft.com/pl-pl/cli/azure/
 
-
 **Create Azure Kubernetes Service**
 
 - Define Variables - parameters for K8S Service in Azure
@@ -43,6 +42,7 @@ kubectl create clusterrolebinding kubernetes-dashboard --clusterrole=cluster-adm
 kubectl config view --raw
 az aks browse --resource-group $RESOURCEGROUPNAME --name $AKS_NAME
 ```
+
 **Create a secondary node pool dedicated to the JMeter workloads.**
 
 ``` bash
@@ -73,8 +73,6 @@ kubectldelete -f akstest/phpinfo.yaml
 kubectl get pods
 kubectl get service
 ```
-
-
 **Destroy Azure Kubernetes Service**
 
 - Deploy to nodepool (default) 
