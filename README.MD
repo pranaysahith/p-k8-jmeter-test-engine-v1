@@ -48,16 +48,6 @@ $env:path += 'C:\Users\admin\.azure-kubectl'
 az aks get-credentials --resource-group $RESOURCEGROUPNAME --name $AKS_NAME
 ```
 
-**Run Kubernetes Dashboard (optional)**
-
-``` bash
-kubectl delete clusterrolebinding kubernetes-dashboard
-kubectl create clusterrolebinding kubernetes-dashboard --clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard --user=clusterUser
-kubectl config view --raw
-start-process -FilePath "az" -ArgumentList "aks browse --resource-group $RESOURCEGROUPNAME --name $AKS_NAME"
-```
-
-
 **Test Deployment**
 
 - Deploy to nodepool (default) 
