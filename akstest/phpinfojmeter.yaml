@@ -2,19 +2,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: php-info
+  name: php-info-jmeter
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: php-info
+      app: php-info-jmeter
   template:
     metadata:
       labels:
-        app: php-info
+        app: php-info-jmeter
     spec:
       containers:
-      - name: php-info
+      - name: php-info-jmeter
         image: jasoncallaway/phpinfo
         resources: {}
         ports:
@@ -33,7 +33,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: php-info
+  name: php-info-jmeter
 spec:
   type: LoadBalancer
   ports:
@@ -44,4 +44,4 @@ spec:
     protocol: TCP
     port: 443
   selector:
-    app: php-info
+    app: php-info-jmeter
