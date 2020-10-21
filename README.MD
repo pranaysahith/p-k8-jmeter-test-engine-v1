@@ -52,7 +52,7 @@ az aks get-credentials --resource-group $RESOURCEGROUPNAME --name $AKS_NAME
 
 - Deploy to nodepool (default) 
 ``` bash
-kubectl create -f akstest/phpinfo.yaml
+kubectl create -f akstest/phpinfomonitoring.yaml
 kubectl get pods -o wide
 kubectl get service
 ```
@@ -65,7 +65,7 @@ kubectl get service
 - Destroy test deployment
 ``` bash
 kubectl delete -f akstest/phpinfojmeter.yaml
-kubectl delete -f akstest/phpinfo.yaml
+kubectl delete -f akstest/phpinfomonitoring.yaml
 kubectl get pods -o wide
 kubectl get service
 ```
