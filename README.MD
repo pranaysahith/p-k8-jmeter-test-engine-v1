@@ -55,7 +55,7 @@ az aks nodepool add --resource-group $RESOURCEGROUPNAME --cluster-name $AKS_NAME
 - Deploy to nodepool (default) 
 ``` bash
 kubectl create -f akstest/phpinfo.yaml
-kubectl get pods
+kubectl get pods -o wide
 kubectl get service
 ```
 - Deploy to jmeter pool
@@ -66,9 +66,9 @@ kubectl get service
 ```
 - Destroy test deployment
 ``` bash
-kubectldelete -f akstest/phpinfojmeter.yaml
-kubectldelete -f akstest/phpinfo.yaml
-kubectl get pods
+kubectl delete -f akstest/phpinfojmeter.yaml
+kubectl delete -f akstest/phpinfo.yaml
+kubectl get pods -o wide
 kubectl get service
 ```
 **Destroy Azure Kubernetes Service**
