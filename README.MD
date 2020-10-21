@@ -40,7 +40,7 @@ az aks get-credentials --resource-group $RESOURCEGROUPNAME --name $AKS_NAME
 kubectl delete clusterrolebinding kubernetes-dashboard
 kubectl create clusterrolebinding kubernetes-dashboard --clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard --user=clusterUser
 kubectl config view --raw
-az aks browse --resource-group $RESOURCEGROUPNAME --name $AKS_NAME
+start-process -FilePath "az" -ArgumentList "aks browse --resource-group $RESOURCEGROUPNAME --name $AKS_NAME"
 ```
 
 **Create a secondary node pool dedicated to the JMeter workloads.**
