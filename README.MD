@@ -47,7 +47,6 @@ start-process -FilePath "az" -ArgumentList "aks browse --resource-group $RESOURC
 
 ``` bash
 $NODESJM="1"
-kubectl config view --raw
 az aks browse --resource-group $RESOURCEGROUPNAME --name $AKS_NAME
 az aks nodepool add --resource-group $RESOURCEGROUPNAME --cluster-name $AKS_NAME --name jmeter --node-count $NODESJM --node-taints sku=jmeter:NoSchedule
 ```
