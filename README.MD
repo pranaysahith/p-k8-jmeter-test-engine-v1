@@ -13,7 +13,7 @@ A first version of the Kubernetes (K8) native application able to generate up to
 $RESOURCEGROUPNAME="k8sk8s"
 $LOCATION="eastus"
 $AKS_NAME="k8s-test"
-$NODES="1"
+$MONITORINGNODES="1"
 $MAXPODS="70"
 ```
 
@@ -22,7 +22,21 @@ $MAXPODS="70"
 az login
 az account set --subscription subscrybtionid
 az group create -l $LOCATION -n $RESOURCEGROUPNAME
-az aks create --name $AKS_NAME --resource-group $RESOURCEGROUPNAME --node-count $NODES --generate-ssh-keys --network-plugin kubenet --max-pods $MAXPODS --enable-rbac --enable-managed-identity --vm-set-type VirtualMachineScaleSets --no-ssh-key
+az aks create --name $AKS_NAME --resource-group $RESOURCEGROUPNAME --node-count $NODES --generate-ssh-keys --network-plugin kubenet --max-pods 1 --enable-rbac --enable-managed-identity --vm-set-type VirtualMachineScaleSets --no-ssh-key
+```
+
+- Deploy node pool dedicated to the monitoring/system workloads and delete the default one.
+``` bash
+az aks nodepool add --resource-group $RESOURCEGROUPNAME --cluster-name $AKS_NAME --name monitoring --node-count $MONITORINGNODES --node-taints sku=monitoring:NoSchedule
+az aks nodepool update --resource-group $RESOURCEGROUPNAME --cluster-name $AKS_NAME --name monitoring --mode system
+az aks nodepool delete --resource-group $RESOURCEGROUPNAME --cluster-name $AKS_NAME --name nodepool1
+```
+
+**Create a secondary node pool dedicated to the JMeter workloads.**
+
+``` bash
+$JMETERNODES="1"
+az aks nodepool add --resource-group $RESOURCEGROUPNAME --cluster-name $AKS_NAME --name jmeter --node-count $JMETERNODES --node-taints sku=jmeter:NoSchedule
 ```
 
 **Install kubeclt and connect to the AKS instance**
@@ -34,7 +48,7 @@ $env:path += 'C:\Users\admin\.azure-kubectl'
 az aks get-credentials --resource-group $RESOURCEGROUPNAME --name $AKS_NAME
 ```
 
-**Run Kubernetes Dashboard**
+**Run Kubernetes Dashboard (optional)**
 
 ``` bash
 kubectl delete clusterrolebinding kubernetes-dashboard
@@ -43,12 +57,6 @@ kubectl config view --raw
 start-process -FilePath "az" -ArgumentList "aks browse --resource-group $RESOURCEGROUPNAME --name $AKS_NAME"
 ```
 
-**Create a secondary node pool dedicated to the JMeter workloads.**
-
-``` bash
-$NODESJM="1"
-az aks nodepool add --resource-group $RESOURCEGROUPNAME --cluster-name $AKS_NAME --name jmeter --node-count $NODESJM --node-taints sku=jmeter:NoSchedule
-```
 
 **Test Deployment**
 
