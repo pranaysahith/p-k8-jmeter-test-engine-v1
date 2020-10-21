@@ -24,6 +24,11 @@ spec:
         - name: https
           protocol: TCP
           containerPort: 443
+      tolerations:
+      - key: "sku"
+        operator: "Equal"
+        value: "monitoring"
+        effect: "NoSchedule"
 ---
 apiVersion: v1
 kind: Service
