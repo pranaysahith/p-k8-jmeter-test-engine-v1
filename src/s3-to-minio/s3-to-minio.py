@@ -23,9 +23,9 @@ class Main():
 
         try:
             s3 = boto3.resource('s3')
-            #logger.debug('Check if the Bucket {} exists'.format(SRC_BUCKET))
+            #logger.debug('Check if the Bucket {} exists'.format(bucket_name))
             if (s3.Bucket(bucket_name) in s3.buckets.all()) == False:
-                logger.info('Bucket {} not found.'.format(SRC_BUCKET))
+                logger.info('Bucket {} not found.'.format(bucket_name))
                 return
             logger.info('Bucket {} found.'.format(bucket_name))    
             bucket = s3.Bucket(bucket_name)
