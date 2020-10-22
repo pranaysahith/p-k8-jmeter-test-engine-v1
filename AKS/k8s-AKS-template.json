@@ -36,10 +36,9 @@
             "vmSize": "Standard_DS2_v2",
             "storageProfile": "ManagedDisks",
             "type": "VirtualMachineScaleSets",
-            "nodeLabels": {},
-            "nodeTaints": [
-              "sku=monitoring:NoSchedule"
-            ],
+            "nodeLabels": {
+              "purpose": "monitoring"
+            },
             "mode": "System",
             "osType": "Linux"
           },
