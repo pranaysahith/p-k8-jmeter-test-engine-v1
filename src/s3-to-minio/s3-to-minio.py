@@ -9,7 +9,7 @@ from botocore.exceptions import ClientError
 
 logger = logging.getLogger('s3-to-minio')
 s3_client = boto3.client('s3')
-folder = '/input/'
+#folder = '/input/'
 
 LOG_LEVEL = os.getenv('LOG_LEVEL', 'INFO').upper()
 
@@ -46,29 +46,32 @@ class Main():
           
 
     @staticmethod
-    def application(S3_BUCKET):
+    def application(s3_bucket, folder):
         try:
-            Main.download_from_s3_bucket(S3_BUCKET,folder)
+            Main.download_from_s3_bucket(s3_bucket,folder)
         except Exception as e:
             logger.error(e)
 
     @staticmethod
     def main(argv):
-        S3_BUCKET = ''
+        s3_bucket = ''
+        download_folder = ''
         try:
-            opts, args = getopt.getopt(argv,"hi:o:",["ifile=","ofile="])
+            opts, args = getopt.getopt(argv,"hb:f:",["bucket=","folder="])
         except getopt.GetoptError:
-            print ('s3-to-minio.py -i <s3 bucket>')
+            print ('s3-to-minio.py -b <s3 bucket> -f <download folder>')
             sys.exit(2)
         for opt, arg in opts:
             if opt == '-h':
-                print ('s3-to-minio -i <s3 bucket>')
+                print ('s3-to-minio -b <s3 bucket> -f <download folder>')
                 sys.exit()
-            elif opt in ("-i", "--ifile"):
-                S3_BUCKET = arg
+            elif opt in ("-b", "--bucket"):
+                s3_bucket = arg
+            elif opt in ("-f", "--folder"):
+                download_folder = arg
 
         Main.log_level(LOG_LEVEL)
-        Main.application(S3_BUCKET)
+        Main.application(s3_bucket, download_folder)
 
 if __name__ == "__main__":
     Main.main(sys.argv[1:])
