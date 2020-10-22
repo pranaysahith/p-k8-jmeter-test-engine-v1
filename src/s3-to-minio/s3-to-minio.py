@@ -7,17 +7,12 @@ import time
 from botocore.client import Config
 from botocore.exceptions import ClientError
 
-logger = logging.getLogger('file processor')
+logger = logging.getLogger('s3-to-minio')
 s3_client = boto3.client('s3')
-
-file_path = '~/input/'
-rebuild_path = '/output/Managed/'
-
-SRC_BUCKET = 'k8-jmeter-test-engine-data'
+folder = '/home/harut/input/'
+S3_BUCKET = 'k8-jmeter-test-engine-data'
 
 LOG_LEVEL = os.getenv('LOG_LEVEL', 'INFO').upper()
-
-SHELL_ACCESS = False
 
 class Main():
 
@@ -26,88 +21,36 @@ class Main():
         logging.basicConfig(level=getattr(logging, level))
 
     @staticmethod
-    def download_from_s3_bucket(inputfile):
+    def download_from_s3_bucket(bucket_name, folder_path):
 
         try:
             s3 = boto3.resource('s3')
             #logger.debug('Check if the Bucket {} exists'.format(SRC_BUCKET))
-            if (s3.Bucket(SRC_BUCKET) in s3.buckets.all()) == False:
+            if (s3.Bucket(bucket_name) in s3.buckets.all()) == False:
                 logger.info('Bucket {} not found.'.format(SRC_BUCKET))
                 return
-            logger.info('Bucket {} found.'.format(SRC_BUCKET))    
-            bucket = s3.Bucket(SRC_BUCKET)
-
-            for file in bucket.objects.all(): 
-                logger.info(file)
-                #path, filename = os.path.split(file.key)
-                #obj_file = file_path + filename
-                #logger.info('Downloading file {}.'.format(filename))
-                #bucket.download_file(file.key, obj_file)
-                # we only are intrested in processing the first file if it exists
-                #break
+            logger.info('Bucket {} found.'.format(bucket_name))    
+            bucket = s3.Bucket(bucket_name)
 
             for objs in bucket.objects.all():
-                print(objs.key)
-                path='/tmp/'+os.sep.join(objs.key.split(os.sep)[:-1])
+                logger.info(objs.key)
+                path=folder_path+os.sep.join(objs.key.split(os.sep)[:-1])
                 try:
                     if not os.path.exists(path):
                         os.makedirs(path)
-                    bucket.download_file(objs.key, '/tmp/'+objs.key)
+                    bucket.download_file(objs.key, folder_path+objs.key)
                 except FileExistsError as fe:                          
-                    print(objs.key+' exists')
+                    logger.error(objs.key+' exists')
 
-
-        except ClientError as e:
-            logger.error("Cannot Connect to {}. Please Verify your credentials.".format(SRC_BUCKET))
-            logger.error(e)
         except Exception as e:
             logger.error(e)
-
-    @staticmethod
-    def download_dir(prefix, local, bucket, client=s3_client):
-        """
-        params:
-        - prefix: pattern to match in s3
-        - local: local path to folder in which to place files
-        - bucket: s3 bucket with target contents
-        - client: initialized s3 client object
-        """
-        keys = []
-        dirs = []
-        next_token = ''
-        base_kwargs = {
-            'Bucket':bucket,
-            'Prefix':prefix,
-        }
-        while next_token is not None:
-            kwargs = base_kwargs.copy()
-            if next_token != '':
-                kwargs.update({'ContinuationToken': next_token})
-            results = client.list_objects_v2(**kwargs)
-            contents = results.get('Contents')
-            for i in contents:
-                k = i.get('Key')
-                if k[-1] != '/':
-                    keys.append(k)
-                else:
-                    dirs.append(k)
-            next_token = results.get('NextContinuationToken')
-        for d in dirs:
-            dest_pathname = os.path.join(local, d)
-            if not os.path.exists(os.path.dirname(dest_pathname)):
-                os.makedirs(os.path.dirname(dest_pathname))
-        for k in keys:
-            dest_pathname = os.path.join(local, k)
-            if not os.path.exists(os.path.dirname(dest_pathname)):
-                os.makedirs(os.path.dirname(dest_pathname))
-            client.download_file(bucket, k, dest_pathname)
           
 
     @staticmethod
     def application(inputfile):
         try:
-            Main.download_from_s3_bucket(inputfile)
-            #Main.download_dir('/',file_path,SRC_BUCKET)
+            #Main.download_from_s3_bucket(S3_BUCKET,'/tmp/')
+            Main.download_from_s3_bucket(S3_BUCKET,folder)
         except Exception as e:
             logger.error(e)
 
