@@ -9,8 +9,7 @@ from botocore.exceptions import ClientError
 
 logger = logging.getLogger('s3-to-minio')
 s3_client = boto3.client('s3')
-folder = '/home/harut/input/'
-S3_BUCKET = 'k8-jmeter-test-engine-data'
+folder = '/input/'
 
 LOG_LEVEL = os.getenv('LOG_LEVEL', 'INFO').upper()
 
@@ -47,30 +46,29 @@ class Main():
           
 
     @staticmethod
-    def application(inputfile):
+    def application(S3_BUCKET):
         try:
-            #Main.download_from_s3_bucket(S3_BUCKET,'/tmp/')
             Main.download_from_s3_bucket(S3_BUCKET,folder)
         except Exception as e:
             logger.error(e)
 
     @staticmethod
     def main(argv):
-        filename = ''
+        S3_BUCKET = ''
         try:
             opts, args = getopt.getopt(argv,"hi:o:",["ifile=","ofile="])
         except getopt.GetoptError:
-            print ('test.py -i <filename>')
+            print ('s3-to-minio.py -i <s3 bucket>')
             sys.exit(2)
         for opt, arg in opts:
             if opt == '-h':
-                print ('test.py -i <filename>')
+                print ('s3-to-minio -i <s3 bucket>')
                 sys.exit()
             elif opt in ("-i", "--ifile"):
-                filename = arg
+                S3_BUCKET = arg
 
         Main.log_level(LOG_LEVEL)
-        Main.application(filename)
+        Main.application(S3_BUCKET)
 
 if __name__ == "__main__":
     Main.main(sys.argv[1:])
