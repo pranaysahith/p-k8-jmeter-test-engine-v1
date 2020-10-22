@@ -9,7 +9,6 @@ from botocore.exceptions import ClientError
 
 logger = logging.getLogger('s3-to-minio')
 s3_client = boto3.client('s3')
-#folder = '/input/'
 
 LOG_LEVEL = os.getenv('LOG_LEVEL', 'INFO').upper()
 
@@ -54,23 +53,36 @@ class Main():
 
     @staticmethod
     def main(argv):
+        help_string = 's3-to-minio.py -b <s3 bucket> -f <download folder> -m <minio URL>'
         s3_bucket = ''
         download_folder = ''
+        minio_URL = ''
+        minio_access_key = ''
+        minio_secret_key = ''
         try:
-            opts, args = getopt.getopt(argv,"hb:f:",["bucket=","folder="])
+            opts, args = getopt.getopt(argv,"hb:f:m:a:s:",["bucket=","folder=","minio=","access=","secret="])
         except getopt.GetoptError:
-            print ('s3-to-minio.py -b <s3 bucket> -f <download folder>')
+            print (help_string)
             sys.exit(2)
         for opt, arg in opts:
             if opt == '-h':
-                print ('s3-to-minio -b <s3 bucket> -f <download folder>')
+                print (help_string)
                 sys.exit()
             elif opt in ("-b", "--bucket"):
                 s3_bucket = arg
             elif opt in ("-f", "--folder"):
                 download_folder = arg
+            elif opt in ("-m", "--minio"):
+                minio_URL = arg
+            elif opt in ("-a", "--access"):
+                minio_access_key = arg
+            elif opt in ("-s", "--secret"):
+                minio_secret_key = arg
 
         Main.log_level(LOG_LEVEL)
+        logger.info(minio_URL)
+        logger.info(minio_access_key)
+        logger.info(minio_secret_key)
         Main.application(s3_bucket, download_folder)
 
 if __name__ == "__main__":
