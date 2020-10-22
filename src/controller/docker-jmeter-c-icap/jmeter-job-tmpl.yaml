@@ -18,6 +18,11 @@ spec:
       #    hostnames:
       #    - "influxdb.influxdb.svc.cluster.local"
       #    - "minio.minio.svc.cluster.local"
+      tolerations:
+      - key: "sku"
+        operator: "Equal"
+        value: "jmeter"
+        effect: "NoSchedule"       
       containers:
       - name: jmeter
         image: ggrig/jmeter-c-icap:2.5
