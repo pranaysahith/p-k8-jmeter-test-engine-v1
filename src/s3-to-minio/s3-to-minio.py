@@ -64,8 +64,6 @@ class Main():
                     if not os.path.exists(path):
                         os.makedirs(path)
                     bucket.download_file(objs.key, folder_path+objs.key)
-                    #logger.info('{}'.format(folder_path))
-                    #logger.info('{}'.format(objs.key))
                     Main.upload_to_minio(folder_path, objs.key)
                 except FileExistsError as fe:                          
                     logger.error(objs.key+' exists')
@@ -82,11 +80,11 @@ class Main():
 
     @staticmethod
     def main(argv):
-        help_string = 's3-to-minio.py -b <s3 bucket> -f <download folder> -m <minio URL>'
+        help_string = 's3-to-minio.py -b <s3 bucket> -f <download folder> -m <minio URL> -i <minio bucket> -a <minio access ket> -s <minio secret key>'
         s3_bucket = ''
         download_folder = ''
         try:
-            opts, args = getopt.getopt(argv,"hb:f:m:a:s:",["bucket=","folder=","minio=","access=","secret="])
+            opts, args = getopt.getopt(argv,"hb:f:m:i:a:s:",["s3bucket=","folder=","minio=","mibucket=","access=","secret="])
         except getopt.GetoptError:
             print (help_string)
             sys.exit(2)
@@ -94,22 +92,22 @@ class Main():
             if opt == '-h':
                 print (help_string)
                 sys.exit()
-            elif opt in ("-b", "--bucket"):
+            elif opt in ("-b", "--s3bucket"):
                 s3_bucket = arg
             elif opt in ("-f", "--folder"):
                 download_folder = arg
             elif opt in ("-m", "--minio"):
                 Main.minio_URL = arg
+            elif opt in ("-i", "--mibucket"):
+                Main.minio_bucket = arg
             elif opt in ("-a", "--access"):
                 Main.minio_access_key = arg
             elif opt in ("-s", "--secret"):
                 Main.minio_secret_key = arg
 
-        Main.minio_bucket = 'input'
-
-
         Main.log_level(LOG_LEVEL)
         logger.info(Main.minio_URL)
+        logger.info(Main.minio_bucket)
         logger.info(Main.minio_access_key)
         logger.info(Main.minio_secret_key)
 
