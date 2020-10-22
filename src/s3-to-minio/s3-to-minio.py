@@ -8,6 +8,7 @@ from botocore.client import Config
 from botocore.exceptions import ClientError
 
 logger = logging.getLogger('file processor')
+s3_client = boto3.client('s3')
 
 file_path = '~/input/'
 rebuild_path = '/output/Managed/'
@@ -38,12 +39,23 @@ class Main():
 
             for file in bucket.objects.all(): 
                 logger.info(file)
-                path, filename = os.path.split(file.key)
-                obj_file = file_path + filename
-                logger.info('Downloading file {}.'.format(filename))
-                bucket.download_file(file.key, obj_file)
+                #path, filename = os.path.split(file.key)
+                #obj_file = file_path + filename
+                #logger.info('Downloading file {}.'.format(filename))
+                #bucket.download_file(file.key, obj_file)
                 # we only are intrested in processing the first file if it exists
                 #break
+
+            for objs in bucket.objects.all():
+                print(objs.key)
+                path='/tmp/'+os.sep.join(objs.key.split(os.sep)[:-1])
+                try:
+                    if not os.path.exists(path):
+                        os.makedirs(path)
+                    bucket.download_file(objs.key, '/tmp/'+objs.key)
+                except FileExistsError as fe:                          
+                    print(objs.key+' exists')
+
 
         except ClientError as e:
             logger.error("Cannot Connect to {}. Please Verify your credentials.".format(SRC_BUCKET))
@@ -52,11 +64,52 @@ class Main():
             logger.error(e)
 
     @staticmethod
+    def download_dir(prefix, local, bucket, client=s3_client):
+        """
+        params:
+        - prefix: pattern to match in s3
+        - local: local path to folder in which to place files
+        - bucket: s3 bucket with target contents
+        - client: initialized s3 client object
+        """
+        keys = []
+        dirs = []
+        next_token = ''
+        base_kwargs = {
+            'Bucket':bucket,
+            'Prefix':prefix,
+        }
+        while next_token is not None:
+            kwargs = base_kwargs.copy()
+            if next_token != '':
+                kwargs.update({'ContinuationToken': next_token})
+            results = client.list_objects_v2(**kwargs)
+            contents = results.get('Contents')
+            for i in contents:
+                k = i.get('Key')
+                if k[-1] != '/':
+                    keys.append(k)
+                else:
+                    dirs.append(k)
+            next_token = results.get('NextContinuationToken')
+        for d in dirs:
+            dest_pathname = os.path.join(local, d)
+            if not os.path.exists(os.path.dirname(dest_pathname)):
+                os.makedirs(os.path.dirname(dest_pathname))
+        for k in keys:
+            dest_pathname = os.path.join(local, k)
+            if not os.path.exists(os.path.dirname(dest_pathname)):
+                os.makedirs(os.path.dirname(dest_pathname))
+            client.download_file(bucket, k, dest_pathname)
+          
+
+    @staticmethod
     def application(inputfile):
         try:
             Main.download_from_s3_bucket(inputfile)
-        except:
-            logger.error('Could not connect to Minio {}'.format(SRC_BUCKET))
+            #Main.download_dir('/',file_path,SRC_BUCKET)
+        except Exception as e:
+            logger.error(e)
 
     @staticmethod
     def main(argv):
