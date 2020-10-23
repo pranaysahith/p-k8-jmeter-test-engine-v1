@@ -1,9 +1,15 @@
-# Learn Terraform - Provision an EKS Cluster
+# Provision an EKS Cluster
 
-This repo is a companion repo to the [Provision an EKS Cluster learn guide](https://learn.hashicorp.com/terraform/kubernetes/provision-eks-cluster), containing
-Terraform configuration files to provision an EKS cluster on AWS.
+## Prerequisites
 
-After installing the AWS CLI. Configure it to use your credentials.
+* [Terraform_0.12.9](https://releases.hashicorp.com/terraform/0.12.9/)
+* [IAM Permissions](https://github.com/terraform-aws-modules/terraform-aws-eks/blob/master/docs/iam-permissions.md)
+* [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+* [AWS IAM Authenticator](https://docs.aws.amazon.com/eks/latest/userguide/install-aws-iam-authenticator.html)
+
+## Setup Steps
+
+Configure AWS CLI to use your credentials.
 
 ```shell
 $ aws configure
@@ -41,11 +47,28 @@ Initializing provider plugins...
 Terraform has been successfully initialized!
 ```
 
+```shell
+$ terraform plan -out plan
+Refreshing Terraform state in-memory prior to plan...
+The refreshed state will be used to calculate this plan, but will not be
+persisted to local or remote state storage.
+
+random_string.suffix: Refreshing state... [id=vXD0Lyze]
+module.eks.data.aws_ami.eks_worker: Refreshing state...
+module.eks.data.aws_iam_policy_document.cluster_elb_sl_role_creation[0]: Refreshing state...
+data.aws_availability_zones.available: Refreshing state...
+module.eks.data.aws_partition.current: Refreshing state...
+module.eks.data.aws_caller_identity.current: Refreshing state...
+module.eks.data.aws_ami.eks_worker_windows: Refreshing state...
+module.eks.data.aws_iam_policy_document.cluster_assume_role_policy: Refreshing state...
+---OUTPUT OMITTED---
+```
+
 Then, provision your EKS cluster by running `terraform apply`. This will 
 take approximately 10 minutes.
 
 ```shell
-$ terraform apply
+$ terraform apply -out plan
 
 # Output truncated...
 
@@ -61,36 +84,11 @@ Apply complete! Resources: 51 added, 0 changed, 0 destroyed.
 
 Outputs:
 
-cluster_endpoint = https://xxxxxx.gr7.us-east-2.eks.amazonaws.com
-cluster_security_group_id = xxxxx
-kubectl_config = apiVersion: v1
-preferences: {}
-kind: Config
-
-clusters:
-- cluster:
-
 ---OUTPUT OMITTED---
 
-users:
-- name: xxxxxx
-  user:
-    exec:
-      apiVersion: client.authentication.k8s.io/v1alpha1
-      command: aws-iam-authenticator
-      args:
-        - "token"
-        - "-i"
-        - "xxxxx"
-
-
-
-region = eu-west-1
 ```
 
 ## Configure kubectl
-
-To configure kubetcl, you need both [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) and [AWS IAM Authenticator](https://docs.aws.amazon.com/eks/latest/userguide/install-aws-iam-authenticator.html).
 
 The following command will get the access credentials for your cluster and automatically
 configure `kubectl`.
@@ -99,10 +97,8 @@ configure `kubectl`.
 $ aws eks --region $(terraform output region) update-kubeconfig --name $(terraform output cluster_name)
 ```
 
-The
-[Kubernetes cluster name](https://github.com/hashicorp/learn-terraform-eks/blob/master/outputs.tf#L26)
-and [region](https://github.com/hashicorp/learn-terraform-eks/blob/master/outputs.tf#L21)
- correspond to the output variables showed after the successful Terraform run.
+
+`Kubernetes cluster name` and `region` correspond to the output variables showed after the successful Terraform run.
 
 You can view these outputs again by running:
 
