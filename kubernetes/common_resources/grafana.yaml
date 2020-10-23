@@ -68,8 +68,9 @@ kind: PersistentVolumeClaim
 metadata:
   name: grafana-storage
 spec:
+  storageClassName: azure-file-storage
   accessModes:
-    - "ReadWriteOnce"
+    - "ReadWriteMany"
   resources:
     requests:
       storage: "8Gi"

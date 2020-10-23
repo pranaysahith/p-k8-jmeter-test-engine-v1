@@ -66,8 +66,9 @@ kind: PersistentVolumeClaim
 metadata:
   name: minio-storage
 spec:
+  storageClassName: azure-file-storage
   accessModes:
-    - "ReadWriteOnce"
+    - "ReadWriteMany"
   resources:
     requests:
       storage: "8Gi"
