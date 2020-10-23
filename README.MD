@@ -22,21 +22,14 @@ $MAXPODS="70"
 az login
 az account set --subscription subscrybtionid
 az group create -l $LOCATION -n $RESOURCEGROUPNAME
-az aks create --name $AKS_NAME --resource-group $RESOURCEGROUPNAME --node-count $NODES --generate-ssh-keys --network-plugin kubenet --max-pods 1 --enable-rbac --enable-managed-identity --vm-set-type VirtualMachineScaleSets --no-ssh-key
-```
-
-- Deploy node pool dedicated to the monitoring/system workloads and delete the default one.
-``` bash
-az aks nodepool add --resource-group $RESOURCEGROUPNAME --cluster-name $AKS_NAME --name monitoring --node-count $MONITORINGNODES --node-taints sku=monitoring:NoSchedule
-az aks nodepool update --resource-group $RESOURCEGROUPNAME --cluster-name $AKS_NAME --name monitoring --mode system
-az aks nodepool delete --resource-group $RESOURCEGROUPNAME --cluster-name $AKS_NAME --name nodepool1
+az aks create --name $AKS_NAME --resource-group $RESOURCEGROUPNAME --node-count $MONITORINGNODES --generate-ssh-keys --network-plugin kubenet --max-pods 1 --enable-rbac --enable-managed-identity --vm-set-type VirtualMachineScaleSets --no-ssh-key
 ```
 
 **Create a secondary node pool dedicated to the JMeter workloads.**
 
 ``` bash
 $JMETERNODES="1"
-az aks nodepool add --resource-group $RESOURCEGROUPNAME --cluster-name $AKS_NAME --name jmeter --node-count $JMETERNODES --node-taints sku=jmeter:NoSchedule
+az aks nodepool add --resource-group $RESOURCEGROUPNAME --cluster-name $AKS_NAME --name jmeter --node-count $JMETERNODES --node-taints sku=jmeter:NoSchedule --labels purpose=jmeter 
 ```
 
 **Install kubeclt and connect to the AKS instance**

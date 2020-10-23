@@ -4,7 +4,7 @@
   "parameters": {
   },
   "variables": {
-    "resourceName": "[concat('k8s-', uniquestring(resourceGroup().id))]",
+    "resourceName": "[resourceGroup().name]",
     "dnsPrefix": "[variables('resourceName')]",
     "osDiskSizeGB": 0,
     "kubernetesVersion": "1.17.11",
@@ -36,9 +36,7 @@
             "vmSize": "Standard_DS2_v2",
             "storageProfile": "ManagedDisks",
             "type": "VirtualMachineScaleSets",
-            "nodeLabels": {
-              "purpose": "monitoring"
-            },
+            "nodeLabels": {},
             "mode": "System",
             "osType": "Linux"
           },
@@ -49,7 +47,9 @@
             "vmSize": "Standard_DS2_v2",
             "storageProfile": "ManagedDisks",
             "type": "VirtualMachineScaleSets",
-            "nodeLabels": {},
+            "nodeLabels": {
+              "purpose": "jmeter"
+            },
             "nodeTaints": [
               "sku=jmeter:NoSchedule"
             ],
