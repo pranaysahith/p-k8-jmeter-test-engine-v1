@@ -5,7 +5,6 @@ if (-not (Test-Path "jmeter-jobs")) {
     write-host "Jobs directory has been created"
 }
 
-
 kubectl delete --ignore-not-found jobs -l jobgroup=jmeter
 
 for ( $i = 0; $i -lt $NUMBER_OF_JOBS; $i++ ) {
