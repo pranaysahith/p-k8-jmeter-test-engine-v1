@@ -64,6 +64,8 @@ class Main():
     @staticmethod
     def process_the_csv_file(csv_file_path):
         Main.create_minio_bucket(Main.bucketname)
+        filename_idx = 1
+        path_idx = 2
         with open(csv_file_path) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=',')
             line_count = 0
@@ -71,9 +73,10 @@ class Main():
             for row in csv_reader:
                 line_count += 1
                 if line_count == 1:
+                    # Skip the first (header) line
                     continue
-                basename = row[1]
-                path = row[2]
+                basename = row[filename_idx]
+                path = row[path_idx]
                 if path.startswith('/'):
                     path = path[1:]
                 if not path.endswith('/'):
