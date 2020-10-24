@@ -16,6 +16,7 @@ LOG_LEVEL = os.getenv('LOG_LEVEL', 'INFO').upper()
 
 class Main():
 
+    bucketname = ''
     cvs_file = ''
     minio_URL = ''
     minio_access_key = ''
@@ -48,32 +49,31 @@ class Main():
         with open(csv_file_path) as csv_file:
             s3 = boto3.resource('s3')
             csv_reader = csv.reader(csv_file, delimiter=',')
+            line_count = 0
             for row in csv_reader:
-                bucketname = row[0]
-                s3_file = row[1]
-                if s3_file.startswith('/'):
-                    s3_file = s3_file[1:]
-                #dirname = os.path.dirname(s3_file)
-                basename = os.path.basename(s3_file)
+                line_count += 1
+                if line_count == 1:
+                    continue
+                basename = row[1]
+                path = row[2]
+                if path.startswith('/'):
+                    path = path[1:]
+                if not path.endswith('/'):
+                    path += '/'
+                s3_file = path + basename
+                logger.info(s3_file)
                 try:
-                    s3.Bucket(bucketname).download_file(s3_file, basename)
-                    Main.upload_to_minio(bucketname, s3_file)
+                    s3.Bucket(Main.bucketname).download_file(s3_file, basename)
+                    Main.upload_to_minio(Main.bucketname, s3_file)
                     os.remove(basename)
                 except Exception as e:
                     logger.info(e)
 
     @staticmethod
-    def application(s3_bucket, folder):
-        try:
-            Main.download_from_s3_bucket(s3_bucket,folder)
-        except Exception as e:
-            logger.error(e)
-
-    @staticmethod
     def main(argv):
         help_string = 's3-to-minio.py -c <cvs file path> -m <minio URL> -a <minio access ket> -s <minio secret key>'
         try:
-            opts, args = getopt.getopt(argv,"hc:m:a:s:",["cvs=","minio=","access=","secret="])
+            opts, args = getopt.getopt(argv,"hb:c:m:a:s:",["bucket=","cvs=","minio=","access=","secret="])
         except getopt.GetoptError:
             print (help_string)
             sys.exit(2)
@@ -81,6 +81,8 @@ class Main():
             if opt == '-h':
                 print (help_string)
                 sys.exit()
+            elif opt in ("-b", "--bucket"):
+                Main.bucketname = arg
             elif opt in ("-c", "--cvs"):
                 Main.cvs_file = arg
             elif opt in ("-m", "--minio"):
@@ -91,12 +93,12 @@ class Main():
                 Main.minio_secret_key = arg
 
         Main.log_level(LOG_LEVEL)
+        logger.info(Main.bucketname)
         logger.info(Main.cvs_file)
         logger.info(Main.minio_URL)
         logger.info(Main.minio_access_key)
         logger.info(Main.minio_secret_key)
 
-        #Main.application(s3_bucket, download_folder)
         Main.process_the_csv_file(Main.cvs_file)
 
 if __name__ == "__main__":
