@@ -71,7 +71,7 @@ class Main():
 
     @staticmethod
     def main(argv):
-        help_string = 's3-to-minio.py -c <cvs file path> -m <minio URL> -a <minio access ket> -s <minio secret key>'
+        help_string = 's3-to-minio.py -b <bucketname> -c <cvs file path> -m <minio URL> -a <minio access ket> -s <minio secret key>'
         try:
             opts, args = getopt.getopt(argv,"hb:c:m:a:s:",["bucket=","cvs=","minio=","access=","secret="])
         except getopt.GetoptError:

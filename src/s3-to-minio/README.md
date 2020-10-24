@@ -19,5 +19,5 @@ region = YOUR_PREFERRED_REGION
 
 Run the script with the following command line:
 ```
-    python3 s3-to-minio.py -b <s3 bucket> -f <download folder> -m <minio URL> -i <minio bucket> -a <minio access ket> -s <minio secret key>
+    python3 's3-to-minio.py -b <bucket name> -c <cvs file path> -m <minio URL> -a <minio access ket> -s <minio secret key>'
 ```
