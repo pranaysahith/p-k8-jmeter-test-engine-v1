@@ -2,8 +2,8 @@
 
 ## Overview
 
-* [jmeter-base](https://github.com/k8-proxy/p-k8-jmeter-test-engine/blob/master/kubernetes/common_resources/grafana.yaml)
-* [jmeter-testdata](https://github.com/k8-proxy/p-k8-jmeter-test-engine/blob/master/kubernetes/common_resources/grafana.yaml)
+* [jmeter-base](https://github.com/k8-proxy/p-k8-jmeter-test-engine/blob/docker-images/Dockerfiles/jmeter-base)
+* [jmeter-testdata](https://github.com/k8-proxy/p-k8-jmeter-test-engine/blob/docker-images/Dockerfiles/jmeter-base)
 
 ## Build and Publish base image 
 
