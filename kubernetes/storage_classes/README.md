@@ -13,4 +13,16 @@ Run the below one time command in the cluster to create the storage class:
 
 ## Elastic Kubernetes Service (AWS)
 
-To be done.
+create an EFS in the same region where EKS is deployed.
+
+Run below command to after updating the EFS id and region in below command to create the provisioner for EFS.
+
+```
+helm install --name efs-provisioner \
+    --namespace default \
+    --set  efsProvisioner.efsFileSystemId=fs-xxxxxx \
+    --set efsProvisioner.awsRegion=us-east-1
+    stable/efs-provisioner
+```
+Once the efs provisioner is deployed, the storage class `efs` can be used in persistent volume claims
+
