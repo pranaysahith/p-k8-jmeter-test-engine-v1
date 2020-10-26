@@ -88,6 +88,11 @@ spec:
       labels:
         app.kubernetes.io/name: influxdb
     spec:
+      tolerations:
+      - key: "key"
+        operator: "Equal"
+        value: "monitoring"
+        effect: "NoSchedule"  
       containers:
       - name: influxdb
         image: "influxdb:1.8.0-alpine"

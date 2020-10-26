@@ -24,6 +24,11 @@ spec:
         app: grafana
         component: core
     spec:
+      tolerations:
+      - key: "key"
+        operator: "Equal"
+        value: "monitoring"
+        effect: "NoSchedule"  
       containers:
         - env:
             - name: GF_SECURITY_ADMIN_USER

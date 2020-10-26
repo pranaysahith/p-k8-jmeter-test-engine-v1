@@ -6,50 +6,81 @@ metadata:
     env: test
     jobgroup: jmeter
 spec:
-  ttlSecondsAfterFinished: 100
+  parallelism: 10
+  ttlSecondsAfterFinished: 60
   template:
     metadata:
       name: jmeter
       labels:
-        jobgroup: jmeter  
+        jobgroup: jmeter      
     spec:
-      imagePullSecrets:
-      - name: docker-secret
+      tolerations:
+      - key: "sku"
+        operator: "Equal"
+        value: "jmeter"
+        effect: "NoSchedule"   
+      hostAliases:
+      - ip: "20.49.204.139"
+        hostnames:
+        - "www.gov.uk"
+        - "assets.publishing.service.gov.uk"
       containers:
       - name: jmeter
-        image: glasswallsolutions/cloud-qa:proxyv1.1
-        # imagePullPolicy: Always
+        image: glasswallsolutions/cloud-qa:proxy1.12
+        imagePullPolicy: IfNotPresent
         # resources:
-        # requests:
-        #   memory: "1024Mi"
-        #   cpu: "500m"
-        # limits:
-        #   memory: "1024Mi"
-        #   cpu: "500m"     
-        env:
-          # Log Level (Default to Info)
-          - name: LOG_LEVEL
-            value: info
-          - name: MY_NODE_NAME
-            valueFrom:
-              fieldRef:
-                fieldPath: spec.nodeName
-          - name: POD_NAME
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.name
-          - name: MY_POD_NAMESPACE
-            valueFrom:
-              fieldRef:
-                fieldPath: metadata.namespace
-          - name: MY_POD_IP
-            valueFrom:
-              fieldRef:
-                fieldPath: status.podIP
-          - name: MY_POD_SERVICE_ACCOUNT
-            valueFrom:
-              fieldRef:
-                fieldPath: spec.serviceAccountName        
+        #   requests:
+        #     memory: "3072Mi"
+        #     cpu: "1500m"
+        #   limits:
+        #     memory: "3072Mi"
+        #     cpu: "1500m"        
+        # env:
+        #   # Source Minio Infromation
+        #   - name: TARGET_MINIO_URL
+        #     value: "http://minio.minio.svc.cluster.local:9000"
+        #   - name: TARGET_MINIO_ACCESS_KEY
+        #     valueFrom:
+        #       secretKeyRef:
+        #         name: minio-creds-secret
+        #         key: accesskey
+        #   - name: TARGET_MINIO_SECRET_KEY
+        #     valueFrom:
+        #       secretKeyRef:
+        #         name: minio-creds-secret
+        #         key: secretkey
+        #   - name: TARGET_MINIO_BUCKET
+        #     value: output
+        #   # Log Level (Default to Info)
+        #   - name: LOG_LEVEL
+        #     value: info
+        #   # Environment info
+        #   - name: MY_NODE_NAME
+        #     valueFrom:
+        #       fieldRef:
+        #         fieldPath: spec.nodeName
+        #   - name: POD_NAME
+        #     valueFrom:
+        #       fieldRef:
+        #         fieldPath: metadata.name
+        #   - name: MY_POD_NAMESPACE
+        #     valueFrom:
+        #       fieldRef:
+        #         fieldPath: metadata.namespace
+        #   - name: MY_POD_IP
+        #     valueFrom:
+        #       fieldRef:
+        #         fieldPath: status.podIP
+        #   - name: MY_POD_SERVICE_ACCOUNT
+        #     valueFrom:
+        #       fieldRef:
+        #         fieldPath: spec.serviceAccountName
+          # JVM
+          # - name: JVM_ARGS
+          #   value: "-Xms1024m -Xmx1024m"
+        #env:
+        #workingDir: /mnt/workspace
+        #command: [ "/bin/sh", "-c", "/mnt/workspace/jmeter.sh" ]
       #   volumeMounts:
       #   - name: jmetervol
       #     mountPath: "/usr/share/jmx"

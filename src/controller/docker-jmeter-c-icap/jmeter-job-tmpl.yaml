@@ -6,6 +6,7 @@ metadata:
     env: test
     jobgroup: jmeter
 spec:
+  parallelism: 1
   ttlSecondsAfterFinished: 60
   template:
     metadata:
@@ -18,6 +19,11 @@ spec:
       #    hostnames:
       #    - "influxdb.influxdb.svc.cluster.local"
       #    - "minio.minio.svc.cluster.local"
+      tolerations:
+      - key: "sku"
+        operator: "Equal"
+        value: "jmeter"
+        effect: "NoSchedule"       
       containers:
       - name: jmeter
         image: ggrig/jmeter-c-icap:2.5
@@ -71,7 +77,7 @@ spec:
                 fieldPath: spec.serviceAccountName
           # JVM
           - name: JVM_ARGS
-            value: "-Xmn128m -Xms512m -Xmx512m"
+            value: "-Xms512m -Xmx512m"
         #env:
         #workingDir: /mnt/workspace
         #command: [ "/bin/sh", "-c", "/mnt/workspace/jmeter.sh" ]
