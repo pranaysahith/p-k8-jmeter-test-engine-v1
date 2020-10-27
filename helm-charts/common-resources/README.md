@@ -27,5 +27,5 @@ $ kubectl port-forward -n common service/minio-service 9000:80
 ### InfluxDB
 
 ```shell
-kubectl port-forward -n common service/influxdb-service 3000:80
+kubectl port-forward -n common service/influxdb-service 8086:80
 ```
