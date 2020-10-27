@@ -21,6 +21,7 @@ minio:
     repository: minio/minio
     tag: RELEASE.2020-10-09T22-55-05Z
     pullPolicy: IfNotPresent
+  port: 9000
   resources:
     limits:
       cpu: 1000m
@@ -37,6 +38,7 @@ grafana:
     repository: grafana/grafana
     tag: 7.0.1
     pullPolicy: IfNotPresent
+  port: 3000
   resources:
     limits:
       cpu: 1000m

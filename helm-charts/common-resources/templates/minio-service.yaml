@@ -3,6 +3,7 @@ kind: Service
 metadata:
   name: minio-service
   labels:
+    app-service: minio
 {{ include "common-resources.labels" . | indent 4 }}
 spec:
   type: {{ .Values.service.type }}

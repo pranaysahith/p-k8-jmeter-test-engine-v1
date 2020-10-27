@@ -3,6 +3,7 @@ kind: Service
 metadata:
   name: grafana-service
   labels:
+    app-service: grafana 
 {{ include "common-resources.labels" . | indent 4 }}
 spec:
   type: {{ .Values.service.type }}
