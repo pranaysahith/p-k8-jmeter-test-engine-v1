@@ -6,6 +6,7 @@ import requests
 import time
 import csv
 import threading
+import uuid
 from botocore.client import Config
 from botocore.exceptions import ClientError
 
@@ -37,9 +38,9 @@ class Main():
             s3.create_bucket(Bucket=bucket_name)
 
     @staticmethod
-    def upload_to_minio(bucket_name, s3_file):
-        basename = os.path.basename(s3_file)
-        logger.info('Uploading file {}.'.format(basename))
+    def upload_to_minio(bucket_name, s3_file, basename):
+        #basename = os.path.basename(s3_file)
+        logger.info('Uploading file {}.'.format(os.path.basename(s3_file)))
         try:
             s3 = boto3.resource('s3', endpoint_url=Main.minio_URL, aws_access_key_id=Main.minio_access_key,
                                 aws_secret_access_key=Main.minio_secret_key, config=Config(signature_version='s3v4'))
@@ -54,9 +55,10 @@ class Main():
     def process_s3_file(bucketname, s3_file):
         try:
             s3 = boto3.resource('s3')
-            basename = os.path.basename(s3_file)
+            a = uuid.uuid4()
+            basename = str(a)#os.path.basename(s3_file)
             s3.Bucket(bucketname).download_file(s3_file, basename)
-            Main.upload_to_minio(bucketname, s3_file)
+            Main.upload_to_minio(bucketname, s3_file, basename)
             os.remove(basename)
         except Exception as e:
             logger.info(e)
