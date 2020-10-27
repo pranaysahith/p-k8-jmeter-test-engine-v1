@@ -42,7 +42,7 @@ class Main():
         logger.info('Uploading file {}.'.format(os.path.basename(s3_file)))
         i = 0
         wait_time = 1
-        while i < 3:
+        while i < 10:
             try:
                 s3 = boto3.resource('s3', endpoint_url=Main.minio_URL, aws_access_key_id=Main.minio_access_key,
                                     aws_secret_access_key=Main.minio_secret_key, config=Config(signature_version='s3v4'))
