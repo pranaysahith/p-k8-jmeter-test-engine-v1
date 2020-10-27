@@ -1,5 +1,5 @@
 ## secrets
-All secrets are currently set to default value `admin`. Secrets can be created/viewed with below commands. Update [secrets-file]() if required.
+All secrets are currently set to default value `admin`. Secrets can be created/viewed with below commands. Update [secrets-file](https://github.com/k8-proxy/p-k8-jmeter-test-engine/blob/helm-charts/helm-charts/common-resources/templates/secrets.yaml) if required.
 
 Creating secret
 ```shell
