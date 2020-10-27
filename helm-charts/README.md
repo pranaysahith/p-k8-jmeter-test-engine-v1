@@ -27,7 +27,7 @@ Run below command to install all resources defined in `common-resource` helm cha
 helm install --name common ./common-resources/ -f ./common-resources/aws.yaml  --namespace common
 ```
 
-### Chart Deletion
+## Chart Deletion
 
 ```shell
 helm delete --purge common
