@@ -39,17 +39,22 @@ class Main():
 
     @staticmethod
     def upload_to_minio(bucket_name, s3_file, basename):
-        #basename = os.path.basename(s3_file)
         logger.info('Uploading file {}.'.format(os.path.basename(s3_file)))
-        try:
-            s3 = boto3.resource('s3', endpoint_url=Main.minio_URL, aws_access_key_id=Main.minio_access_key,
-                                aws_secret_access_key=Main.minio_secret_key, config=Config(signature_version='s3v4'))
-            logger.debug('Uploading file to bucket {} minio {}'.format(bucket_name, Main.minio_URL))
-            s3.Bucket(bucket_name).upload_file(basename, s3_file)
-        except ClientError as e:
-            logger.error("Cannot connect to the minio {}. Please vefify the Credentials.".format(Main.minio_URL))
-        except Exception as e:
-            logger.info(e)
+        i = 0
+        wait_time = 1
+        while i < 3:
+            try:
+                s3 = boto3.resource('s3', endpoint_url=Main.minio_URL, aws_access_key_id=Main.minio_access_key,
+                                    aws_secret_access_key=Main.minio_secret_key, config=Config(signature_version='s3v4'))
+                logger.debug('Uploading file to bucket {} minio {}'.format(bucket_name, Main.minio_URL))
+                s3.Bucket(bucket_name).upload_file(basename, s3_file)
+                break
+            except Exception as e:
+                logger.info(e)
+            i += 1
+            logger.info('Waiting {} seconds.'.format(wait_time))
+            time.sleep(wait_time)
+            wait_time *= 2
 
     @staticmethod
     def process_s3_file(bucketname, s3_file):
