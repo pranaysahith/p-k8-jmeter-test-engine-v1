@@ -92,9 +92,17 @@ class Main():
                 x = threading.Thread(target=Main.process_s3_file, args=(Main.bucketname, s3_file,))
                 threads.append(x)
                 x.start()
+                # limit the number of parallel threads
+                if line_count % 100 == 0:
+                    # Clean up the threads
+                    logging.info ('Lines processed so far {}'.format(line_count))
+                    for index, thread in enumerate(threads):
+                        thread.join()
+                        if index >= line_count:
+                            logging.info("Main    : thread %d done", index)
+
 
             for index, thread in enumerate(threads):
-                #logging.info("Main    : before joining thread %d.", index)
                 thread.join()
                 logging.info("Main    : thread %d done", index)
 
