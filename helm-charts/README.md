@@ -19,7 +19,7 @@ kubectl patch deploy --namespace kube-system tiller-deploy -p '{"spec":{"templat
 helm init --service-account tiller --upgrade
 ```
 
-## Chart Installtion
+## Chart Installation
 
 Run below command to install all resources defined in `common-resource` helm chart
 
