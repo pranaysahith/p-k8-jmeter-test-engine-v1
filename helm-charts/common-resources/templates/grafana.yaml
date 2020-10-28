@@ -19,6 +19,15 @@ spec:
         app: grafana
         release: {{ .Release.Name }}
     spec:
+      initContainers:
+        - name: volume-permissions
+          image: busybox
+          command: ['sh', '-c', 'chown -R 472:472 /var/lib/grafana']
+          volumeMounts:
+          - mountPath: /var/lib/grafana
+            name: grafana-storage
+      securityContext:
+        fsGroup: 472
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.grafana.image.repository }}:{{ .Values.grafana.image.tag }}"
@@ -48,9 +57,9 @@ spec:
               port: http
             initialDelaySeconds: 15
             periodSeconds: 20
-            volumeMounts:
-              - name: grafana-storage
-                mountPath: /var/lib/grafana
+          volumeMounts:
+            - name: grafana-storage
+              mountPath: /var/lib/grafana
           resources:
             {{- toYaml .Values.grafana_resources  | nindent 12 }}
       volumes:

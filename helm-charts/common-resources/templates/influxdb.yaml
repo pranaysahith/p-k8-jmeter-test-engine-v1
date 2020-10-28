@@ -43,15 +43,15 @@ spec:
               scheme: HTTP
             initialDelaySeconds: 15
             periodSeconds: 20
-            volumeMounts:
-              - name: influxdb-storage
-                mountPath: /var/lib/influxdb
-              - name: config
-                mountPath: /etc/influxdb
-              - name: init-script
-                mountPath: /docker-entrypoint-initdb.d
+          volumeMounts:
+            - name: influxdb-storage
+              mountPath: /var/lib/influxdb
+            - name: config
+              mountPath: /etc/influxdb
+            - name: init-script
+              mountPath: /docker-entrypoint-initdb.d
           resources:
-            {{- toYaml .Values.influxdb_resources  | nindent 12 }}
+            {{- toYaml .Values.grafana_resources  | nindent 12 }}
       volumes:
         - name: influxdb-storage
           persistentVolumeClaim:

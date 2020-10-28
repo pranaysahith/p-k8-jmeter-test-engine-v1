@@ -50,9 +50,9 @@ spec:
               port: http
             initialDelaySeconds: 15
             periodSeconds: 20
-            volumeMounts:
-              - name: minio-storage
-                mountPath: /data
+          volumeMounts:
+            - name: minio-storage
+              mountPath: /data
           resources:
             {{- toYaml .Values.minio.resources | nindent 12 }}
       volumes:
