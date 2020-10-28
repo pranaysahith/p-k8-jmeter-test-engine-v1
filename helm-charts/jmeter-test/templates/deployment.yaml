@@ -29,10 +29,10 @@ spec:
 
         resources:
           requests:
-            memory: "3500Mi"
+            memory: "4096Mi"
             cpu: "1000m"
           limits:
-            memory: "3500Mi"
+            memory: "4096Mi"
             cpu: "1000m"
         imagePullPolicy: Always
         env:
