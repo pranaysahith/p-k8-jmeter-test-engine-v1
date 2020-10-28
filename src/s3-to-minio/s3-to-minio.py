@@ -30,12 +30,15 @@ class Main():
 
     @staticmethod
     def create_minio_bucket(bucket_name):
-        s3 = boto3.resource('s3', endpoint_url=Main.minio_URL, aws_access_key_id=Main.minio_access_key,
-                            aws_secret_access_key=Main.minio_secret_key, config=Config(signature_version='s3v4'))
-        logger.debug('Checking if the Bucket to upload files exists or not.')
-        if (s3.Bucket(bucket_name) in s3.buckets.all()) == False:
-            logger.info('Bucket not Found. Creating Bucket.')
-            s3.create_bucket(Bucket=bucket_name)
+        try:
+            s3 = boto3.resource('s3', endpoint_url=Main.minio_URL, aws_access_key_id=Main.minio_access_key,
+                                aws_secret_access_key=Main.minio_secret_key, config=Config(signature_version='s3v4'))
+            logger.debug('Checking if the Bucket to upload files exists or not.')
+            if (s3.Bucket(bucket_name) in s3.buckets.all()) == False:
+                logger.info('Bucket not Found. Creating Bucket.')
+                s3.create_bucket(Bucket=bucket_name)
+        except Exception as e:
+            logger.info(e)
 
     @staticmethod
     def upload_to_minio(bucket_name, s3_file, basename):
