@@ -17,6 +17,6 @@ $ docker push glasswallsolutions/jmeter:5.3
 
 
 ```shell
-$ docker build . -t glasswallsolutions/jmeter-testdata -f Dockerfiles/jmeter-testdata 
-$ docker push glasswallsolutions/jmeter-testdata
+$ docker build . -t glasswallsolutions/jmeter:testdata -f Dockerfiles/jmeter-testdata 
+$ docker push glasswallsolutions/jmeter:testdata
 ```
