@@ -6,7 +6,7 @@ metadata:
     env: test
     jobgroup: jmeter
 spec:
-  parallelism: 1
+  parallelism: 40
   ttlSecondsAfterFinished: 60
   template:
     metadata:
@@ -21,8 +21,7 @@ spec:
         effect: "NoSchedule"       
       containers:
       - name: jmeter
-        #image: ggrig/jmeter-c-icap:2.5
-        image:  shashanksinha/docker-jmeter-c-icap:2
+        image:  glasswallsolutions/jmeter:testdata
         resources:
           requests:
             memory: "1500Mi"
