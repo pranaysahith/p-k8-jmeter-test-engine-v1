@@ -30,7 +30,7 @@ spec:
           limits:
             memory: "1500Mi"
             cpu: "500m"
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         env:
           # Source Minio Infromation
           - name: TARGET_MINIO_URL
@@ -73,7 +73,7 @@ spec:
                 fieldPath: spec.serviceAccountName
           # JVM
           - name: JVM_ARGS
-            value: "-Xms512m -Xmx2048m"
+            value: '"-Xms1024m -Xmx2048m"'
         volumeMounts:
         - name: jmetervol
           mountPath: "/usr/share/jmx"
