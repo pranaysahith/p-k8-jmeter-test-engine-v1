@@ -32,7 +32,7 @@ module "eks" {
       kubelet_extra_args            = "--node-labels=key=monitoring --register-with-taints=key=monitoring:NoSchedule"
     },
     {
-      name                          = "k8s-node-group-3"
+      name                          = "k8s-node-group"
       instance_type                 = "m4.xlarge"
       spot_price                    = "${var.m4_x_spot_price["${var.region}"]}"
       additional_userdata           = "echo foo bar"
