@@ -6,16 +6,16 @@ parser = argparse.ArgumentParser(description="Numeber of Jmeter Threads")
 parser.add_argument("-u", "--user", type=int, default=5, help="Enter number of users")
 args = parser.parse_args()
 
-DEPLOYMENT_NAME = "nginx-deployment"
+DEPLOYMENT_NAME = "nginx-deployment"  #Deployment Name
 
 
 def create_deployment_object():
     # Configureate Pod template container
 
     container = client.V1Container(
-        name="nginx",
-        image="nginx:1.15.4",
-        ports=[client.V1ContainerPort(container_port=80)],
+        name="nginx",  # Enter Image Name 
+        image="nginx:1.15.4", # Enter Image 
+        ports=[client.V1ContainerPort(container_port=80)], #expose Port of Image
         resources=client.V1ResourceRequirements(
             requests={"cpu": "100m", "memory": "200Mi"},
             limits={"cpu": "500m", "memory": "500Mi"}
