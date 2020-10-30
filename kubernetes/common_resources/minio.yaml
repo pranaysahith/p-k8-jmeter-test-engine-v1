@@ -1,6 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: minio
   name: minio
 spec:
   selector:
@@ -13,6 +14,11 @@ spec:
       labels:
         app: minio
     spec:
+      tolerations:
+      - key: "key"
+        operator: "Equal"
+        value: "monitoring"
+        effect: "NoSchedule"  
       containers:
       - name: minio
         image: minio/minio:RELEASE.2020-10-09T22-55-05Z
@@ -50,6 +56,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  namespace: minio
   name: minio
   labels:
     service: minio
@@ -64,10 +71,36 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
+  namespace: minio
   name: minio-storage
 spec:
+  storageClassName: azure-file-storage
   accessModes:
-    - "ReadWriteOnce"
+    - "ReadWriteMany"
   resources:
     requests:
-      storage: "8Gi"
+      storage: "100Gi"
+---
+apiVersion: autoscaling/v2beta1 
+kind: HorizontalPodAutoscaler 
+metadata: 
+  name: minio
+  namespace: minio
+  labels:
+    app: minio
+spec: 
+  minReplicas: 1
+  maxReplicas: 10
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment 
+    name: minio
+  metrics: 
+  - type: Resource 
+    resource: 
+      name: cpu 
+      targetAverageUtilization: 75
+  - type: Resource 
+    resource: 
+      name: memory 
+      targetAverageUtilization: 75

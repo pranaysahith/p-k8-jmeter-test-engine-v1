@@ -88,6 +88,11 @@ spec:
       labels:
         app.kubernetes.io/name: influxdb
     spec:
+      tolerations:
+      - key: "key"
+        operator: "Equal"
+        value: "monitoring"
+        effect: "NoSchedule"  
       containers:
       - name: influxdb
         image: "influxdb:1.8.0-alpine"
@@ -131,8 +136,9 @@ spec:
     - metadata:
         name: influxdb-data
       spec:
+        storageClassName: azure-file-storage
         accessModes:
-          - "ReadWriteOnce"
+          - "ReadWriteMany"
         resources:
           requests:
-            storage: "8Gi"
+            storage: "20Gi"
